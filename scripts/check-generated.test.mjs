@@ -19,7 +19,11 @@ describe('parsePorcelain', () => {
     expect(parsePorcelain('?? schemas/a.json\r\n')).toEqual(['?? schemas/a.json']);
   });
 
-  it('covers bindings and schemas', () => {
-    expect(GENERATED_PATHS).toEqual(['src/lib/ipc/bindings.ts', 'schemas/']);
+  it('covers bindings, spike bindings and schemas', () => {
+    expect(GENERATED_PATHS).toEqual([
+      'src/lib/ipc/bindings.ts',
+      'src/lib/ipc/bindings.spikes.ts',
+      'schemas/',
+    ]);
   });
 });

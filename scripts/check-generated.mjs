@@ -6,8 +6,15 @@
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-/** Пути, которые пишет `just gen` (ADR-23). */
-export const GENERATED_PATHS = ['src/lib/ipc/bindings.ts', 'schemas/'];
+/**
+ * Пути, которые пишет `just gen` (ADR-23). `bindings.spikes.ts` — спайк-команды за cargo-feature
+ * `spikes` (T-004.1), генерируется вторым запуском `gen_bindings`.
+ */
+export const GENERATED_PATHS = [
+  'src/lib/ipc/bindings.ts',
+  'src/lib/ipc/bindings.spikes.ts',
+  'schemas/',
+];
 
 /**
  * Разбирает вывод `git status --porcelain` в список непустых строк.

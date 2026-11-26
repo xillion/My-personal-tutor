@@ -11,6 +11,7 @@ Cargo.lock
 
 # Сгенерированный код (ADR-23): форматтер не должен создавать дифф после `just gen`
 src/lib/ipc/bindings.ts
+src/lib/ipc/bindings.spikes.ts
 schemas/
 src/lib/paraglide/
 project.inlang/cache/

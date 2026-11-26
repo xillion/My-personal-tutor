@@ -38,6 +38,15 @@ specta-typescript.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
+# Системный TTS (ADR-13) для спайка T-004; только с feature `spikes` — в релизе не линкуется
+# (на Linux тянет libspeechd). Переход на постоянное использование — T-305.
+tts = { workspace = true, optional = true }
 
 [lints]
 workspace = true
+
+[features]
+default = []
+# Спайк-команды `spike_*` (T-004, `docs/01_ARCHITECTURE.md` §4a): выключена по умолчанию и в
+# релизе. Включается в `just dev`, `just gen` (второй файл `bindings.spikes.ts`) и CI.
+spikes = ["dep:tts"]

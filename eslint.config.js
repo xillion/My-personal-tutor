@@ -74,6 +74,7 @@ export default defineConfig(
     'schemas/',
     // Сгенерированный код: bindings (tauri-specta, ADR-23) и сообщения Paraglide.
     'src/lib/ipc/bindings.ts',
+    'src/lib/ipc/bindings.spikes.ts',
     'src/lib/paraglide/',
     'project.inlang/cache/',
   ]),

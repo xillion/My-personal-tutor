@@ -148,6 +148,11 @@ cmd quiz_finish(session_id) → QuizSummary
   `mpt_app::export_bindings()` (тот же `specta_builder()`, что в `run()`), окно не создаёт.
   `just gen-check` = `just gen` + `node scripts/check-generated.mjs`: пустой
   `git status --porcelain -- src/lib/ipc/bindings.ts schemas/` (видит и неотслеживаемые файлы).
+- **Спайк-команды (`spike_*`, T-004.1)** — за cargo-feature `spikes` (§4a). `bindings.ts`
+  генерируется без неё и `spike_*` не содержит никогда; второй запуск `just gen`
+  (`--features spikes`) пишет только `src/lib/ipc/bindings.spikes.ts` (спайк-команды и их типы,
+  своя копия `AppError`; новых `AppErrorCode` спайк не вводит). Оба файла коммитятся и
+  проверяются `gen-check`; `bindings.spikes.ts` импортирует только `src/lib/ipc/spikes.ts`.
 - Пакет `src-tauri` называется `mpt-app` (lib + bin): `lib.rs` содержит `run()` и
   `specta_builder()`, `src/bin/gen_bindings.rs` экспортирует bindings без запуска окна.
 - `Clock`: трейт `mpt_core::clock::Clock { fn now_ms(&self) -> i64 }` и фиктивные часы для тестов —

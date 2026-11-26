@@ -12,13 +12,21 @@ set windows-shell := ["pwsh", "-NoLogo", "-NoProfile", "-NonInteractive", "-Comm
 default:
     @just --list --unsorted
 
-# Запустить приложение в режиме разработки (tauri dev)
+# Запустить приложение в режиме разработки (tauri dev) со спайк-командами (feature `spikes`)
 dev:
-    pnpm tauri dev
+    pnpm tauri dev --features spikes
 
-# Собрать приложение и установщики (tauri build)
+# Собрать приложение и установщики (tauri build, без feature `spikes`)
 build:
     pnpm tauri build
+
+# Debug-сборка со спайк-командами без установщиков — для ручных прогонов T-004 (CSP действует)
+build-spikes:
+    pnpm tauri build --debug --no-bundle --features spikes
+
+# Пересоздать тестовое аудио src-tauri/spikes/ (espeak-ng/say + ffmpeg; только Linux/macOS)
+spike-audio:
+    bash scripts/make-spike-audio.sh
 
 # Все проверки, как в CI; останавливается на первой ошибке
 check: lint typecheck test gen-check offline licenses
@@ -32,9 +40,10 @@ fmt:
 fmt-check:
     cargo fmt --all --check
 
-# Clippy по всему workspace, предупреждения — ошибки
+# Clippy по всему workspace, предупреждения — ошибки; затем mpt-app со спайк-командами
 clippy:
     cargo clippy --workspace --all-targets --locked '--' -D warnings
+    cargo clippy -p mpt-app --all-targets --locked --features spikes '--' -D warnings
 
 # Линтеры: rustfmt --check, clippy, Prettier --check, ESLint
 lint: fmt-check clippy
@@ -47,19 +56,22 @@ typecheck:
 # Все тесты: cargo test и Vitest
 test: test-rust test-js
 
-# Тесты Rust
+# Тесты Rust; затем mpt-app со спайк-командами (feature `spikes`)
 test-rust:
     cargo test --workspace --locked
+    cargo test -p mpt-app --locked --features spikes
 
 # Тесты фронтенда и скриптов (Vitest)
 test-js:
     pnpm test
 
-# Сгенерировать src/lib/ipc/bindings.ts (tauri-specta); JSON-схемы — с T-101 (`mptc schema`)
+# Сгенерировать src/lib/ipc/bindings.ts и bindings.spikes.ts (tauri-specta; второй — спайк-команды
+# с feature `spikes`, bindings.ts он не трогает); JSON-схемы — с T-101 (`mptc schema`)
 gen:
     cargo run --locked -p mpt-app --bin gen_bindings
+    cargo run --locked -p mpt-app --features spikes --bin gen_bindings
 
-# Проверить, что сгенерированные файлы актуальны: после `just gen` в bindings.ts и schemas/
+# Проверить, что сгенерированные файлы актуальны: после `just gen` в bindings*.ts и schemas/
 # нет изменений и новых неотслеживаемых файлов (`git status --porcelain`)
 gen-check: gen
     node scripts/check-generated.mjs
