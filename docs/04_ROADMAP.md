@@ -120,7 +120,7 @@ cargo test --workspace` зелёные; `cargo tree -p mpt-core -e normal` не 
 нет, задача закрывается с пометкой «CI не прогонялся» в CHANGELOG, а прогон CI становится первым
 пунктом следующей задачи.
 
-### [~] T-002 Типизированный IPC и ошибки — `rust-core` (+ `svelte-ui` для `client.ts`) · M
+### [x] T-002 Типизированный IPC и ошибки — `rust-core` (+ `svelte-ui` для `client.ts`) · M
 Зависит от: T-001
 - `tauri-specta`, `specta`, `specta-typescript` — точные версии из ADR-23; `specta_builder()`
   в `mpt-app`, бинарь `gen_bindings`; `just gen` пишет `src/lib/ipc/bindings.ts`.
