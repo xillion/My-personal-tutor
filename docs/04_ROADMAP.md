@@ -169,7 +169,7 @@ Vitest + `mockIPC`: `call()` возвращает `ok` для `app_ping` и `err
 «не проверено: нет устройства» и перенесены в чек-лист T-408 (ADR-24); по каждому провалу
 записано решение (fallback или изменение ADR через `architect`).
 
-#### [ ] T-004.1 Стенд `/dev/spikes` — `svelte-ui` + `rust-core` · M
+#### [~] T-004.1 Стенд `/dev/spikes` — `svelte-ui` + `rust-core` · M
 Зависит от: T-002
 - Тестовое аудио: скрипт `scripts/make-spike-audio.sh` (локальный TTS `espeak-ng`/`say` +
   `ffmpeg`) создаёт ~30 с речи в `.m4a` (AAC-LC, моно, 64 kbps) и тот же звук в `.ogg` (Opus) для
