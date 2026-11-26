@@ -1,11 +1,13 @@
-# CI (T-001.4): `just check` на Linux, Windows и macOS для каждого PR и push в main.
+# CI (T-001.4): `just check` на Linux, Windows и macOS для каждого PR и push в main и task/*.
 # Actions зафиксированы полным SHA коммита (комментарий — версия тега); обновлять отдельным PR.
 name: CI
 
 on:
   push:
-    branches: [main]
+    # До MVP задачи идут через ветки task/* без PR (слияние fast-forward в main).
+    branches: [main, 'task/**']
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
