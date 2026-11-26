@@ -406,7 +406,9 @@ RC-зависимости или мажорной версии — отдель�
   экосистемы Rust/npm распространяются под Apache-2.0, который несовместим с GPLv2-only.
   `LICENSE` в корне, `license = "GPL-3.0-or-later"` в `[workspace.package]` и в `package.json`.
   Зависимости — только с лицензиями, совместимыми с GPLv3 (MIT, Apache-2.0, BSD, ISC, Zlib,
-  MPL-2.0, LGPL, GPL-3.0); проверка — `cargo deny check licenses` и аналог для pnpm в `just check`.
+  MPL-2.0, LGPL, GPL-3.0, а также Unicode-3.0 и Apache-2.0 WITH LLVM-exception — обе совместимы с
+  GPLv3, встречаются в дереве Tauri); проверка — `cargo deny check licenses` (`deny.toml`) и
+  `pnpm check:licenses` (только prod-зависимости) в `just check`.
   Шрифт Andika (OFL-1.1) поставляется как отдельный компонент со своим `OFL.txt`.
   Лицензия контента курсов задаётся отдельно в каждом курсе (`02_COURSE_FORMAT.md`) и не
   наследует GPL.

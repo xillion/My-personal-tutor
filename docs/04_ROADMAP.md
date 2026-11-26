@@ -96,7 +96,7 @@ cargo test --workspace` зелёные; `cargo tree -p mpt-core -e normal` не 
 ссылок на внешние хосты (`rg -n "https?://" build/ --glob '*.{html,css}'` пуст, проверка
 встроена в `just check`).
 
-#### [~] T-001.4 `justfile` и CI — `rust-core` · S
+#### [x] T-001.4 `justfile` и CI — `rust-core` · S
 Зависит от: T-001.3
 - Рецепты: `dev`, `build`, `test`, `check`, `gen`, `gen-check`, `fmt`, `lint`, `e2e`,
   `course-sample`. До T-002 `gen` — заглушка, которая печатает «нечего генерировать» и возвращает 0;
@@ -133,6 +133,9 @@ cargo test --workspace` зелёные; `cargo tree -p mpt-core -e normal` не 
 - `src/lib/ipc/client.ts`: `call()` → `{ ok: true, data } | { ok: false, error }`;
   `errorMessage(code)` — исчерпывающий `switch` по `AppErrorCode` с Paraglide-сообщениями.
 - Dev-страница `/dev` (только `import.meta.env.DEV`) с кнопкой `app_ping` и выводом `app_info`.
+
+- Из T-001.4: `gen-check` через `git diff --exit-code` не видит новые неотслеживаемые файлы —
+  заменить на проверку `git status --porcelain -- src/lib/ipc/bindings.ts schemas/` (пустой вывод).
 
 Приёмка: два подряд `just gen` дают нулевой `git diff`; `just gen-check` входит в `just check`
 и падает, если `bindings.ts` устарел (проверено один раз вручную); Rust-тест: `AppError`

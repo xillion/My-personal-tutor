@@ -22,8 +22,12 @@
   `@tauri-apps/*` только в `src/lib/ipc/`) + Prettier, Vitest + Testing Library, проверка
   офлайн-сборки `pnpm check:offline` (в `just check` — с T-001.4). (T-001.3)
 - Журнал известных проблем `docs/KNOWN_ISSUES.md` (уровни S1–S4).
+- `justfile` (`just check` = fmt + clippy + lint + svelte-check + тесты + gen-check + офлайн-сборка +
+  лицензии), `deny.toml` и `pnpm check:licenses` (ADR-24), CI GitHub Actions на ubuntu-24.04 /
+  windows-latest / macos-latest + actionlint; actions закреплены по SHA. CI зелёный на трёх ОС. (T-001.4)
 
 ### Fixed
+- `prepare` больше не глотает ошибки `svelte-kit sync`/Paraglide (KI-008). (T-001.4)
 - `tauri dev`: scoped-стили не применялись до первого HMR — обход в `vite.config.ts` (KI-001). (T-001.3)
 
 ### Known issues
