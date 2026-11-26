@@ -1,0 +1,32 @@
+/*
+ * Дизайн-токены (docs/01_ARCHITECTURE.md §6). Tailwind v4 превращает переменные `@theme`
+ * в утилиты: `--font-reading` → `font-reading`, `--spacing-touch` → `min-h-touch`/`size-touch`,
+ * `--color-ink` → `text-ink` и т. д. Палитры подсветки (`--hl-*`) добавляются вместе с читалкой.
+ */
+
+@theme {
+  /* Шрифт текста уроков и UI. Переключается атрибутом `data-font` на <html> (T-005.1). */
+  --font-reading: 'Andika', ui-sans-serif, system-ui, sans-serif;
+  /* Шрифт по умолчанию для всего UI (preflight Tailwind берёт его для <html>). */
+  --font-sans: var(--font-reading);
+
+  /* Основной текст для детей — 18–22 px. */
+  --text-body: 1.25rem;
+  --text-body--line-height: 1.6;
+
+  /* Минимальная зона нажатия — 48 px. */
+  --spacing-touch: 3rem;
+
+  --color-surface: oklch(98.5% 0.01 95);
+  --color-ink: oklch(25% 0.03 260);
+  --color-accent: oklch(55% 0.16 250);
+}
+
+/*
+ * Альтернативный шрифт (ADR-15): символы, которых нет в OpenDyslexic (часть расширенной
+ * кириллицы и IPA), берутся из Andika, а не из системного шрифта. Формулы KaTeX задают
+ * свой font-family и не затрагиваются.
+ */
+:root[data-font='dyslexic'] {
+  --font-reading: 'OpenDyslexic', 'Andika', sans-serif;
+}

@@ -246,6 +246,9 @@ Fallback, если `tauri-specta` заблокирует обновление Ta
   поставляется локально (woff2) со своим файлом лицензии. Если в нём нет кириллицы или IPA,
   недостающие символы берутся из Andika через стек `font-family`, а не из системного шрифта.
   Настройка шрифта применяется к тексту уроков и UI, но не к формулам KaTeX.
+- Источники и версии шрифтов, sha256 и покрытие — `static/fonts/SOURCE.md` (Andika 7.000 из релиза
+  SIL; OpenDyslexic 0.990 с forge.hackers.town по закреплённому коммиту — GitHub-релиз 2019 года
+  без файла лицензии). Сабсетинг запрещён без переименования (Reserved Font Name в OFL).
 - Экспорт и импорт прогресса профиля в файл (смена устройства) — уже в MVP.
 
 ## ADR-16. ИИ как опциональный, ограниченный провайдер
@@ -303,6 +306,10 @@ Fallback, если `tauri-specta` заблокирует обновление Ta
 
 **Решение.** Строки UI — Paraglide JS (типизированные сообщения, tree-shaking). Язык UI по умолчанию ru.
 Инлайн-атрибут `lang=` в контенте ставит `lang` на span: правильные шрифты, переносы и голос TTS.
+Paraglide 3 (T-001.3): стратегия `['localStorage', 'baseLocale']` (ключ `mpt.locale`; позже язык
+задаёт профиль, T-406), `outputStructure: 'message-modules'`; код генерируется Vite-плагином и
+`pnpm i18n`, в git не коммитится; плагин формата сообщений подключается локальным путём из
+`node_modules` (без CDN, ADR-21). Смена языка перезагружает документ.
 
 ## ADR-21. Офлайн и приватность
 
@@ -341,7 +348,8 @@ TypeScript 6, Paraglide 3, Vitest 5). Node 20 из README снят с подде
   Toolchain обновляется отдельным PR, а не попутно.
 - **SvelteKit 3** не читает `svelte.config.js` (ошибка `config_file_unsupported`): конфигурация
   Kit передаётся в `sveltekit({...})` в `vite.config.ts`, `tsconfig.json` расширяет
-  `$app/tsconfig`. TypeScript держится на 6.x (Kit 3 требует `^6`), переход на 7 — отдельным PR.
+  `$app/tsconfig`. Алиас `$lib` в Kit 3 удалён — импорты через `#lib/*` (`package.json`
+  `imports`). В Vite 8 настройки HMR-сокета — `server.ws` (`server.hmr.*` устарел). TypeScript держится на 6.x (Kit 3 требует `^6`), переход на 7 — отдельным PR.
 - **Lock-файлы** `Cargo.lock` и `pnpm-lock.yaml` коммитятся. В CI — `pnpm install --frozen-lockfile`.
 - **Мажорные версии, сверенные 2026-11-26** (точные — в lock-файлах):
 

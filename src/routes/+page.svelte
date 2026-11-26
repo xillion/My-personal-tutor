@@ -1,24 +1,7 @@
 <script lang="ts">
-  // TODO(T-001.3): заменить хардкод на сообщение Paraglide `app_title`.
-  const title = 'My Personal Tutor';
+  import { m } from '#lib/paraglide/messages.js';
 </script>
 
-<main>
-  <h1>{title}</h1>
+<main class="grid min-h-screen place-items-center p-6">
+  <h1 class="text-center font-reading text-4xl font-bold text-ink">{m.app_title()}</h1>
 </main>
-
-<style>
-  /* Временные стили до дизайн-системы (T-001.3: Tailwind v4, токены, шрифт Andika). */
-  main {
-    display: grid;
-    place-items: center;
-    min-height: 100vh;
-    margin: 0;
-    font-family: system-ui, sans-serif;
-    font-size: 1.25rem;
-  }
-
-  h1 {
-    font-size: 2.5rem;
-  }
-</style>

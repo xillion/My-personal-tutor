@@ -73,7 +73,7 @@ cargo test --workspace` зелёные; `cargo tree -p mpt-core -e normal` не 
 проходит; `capabilities/*.json` не содержат `fs:`/`shell:`; `identifier` = `dev.rnd-center.mpt`;
 `package.json` содержит `"license": "GPL-3.0-or-later"`.
 
-#### [ ] T-001.3 Фронтенд-инструменты — `svelte-ui` · M
+#### [x] T-001.3 Фронтенд-инструменты — `svelte-ui` · M
 Зависит от: T-001.2
 - Tailwind v4 (`@theme` в `src/lib/ui/tokens.css`), Bits UI, Paraglide 3 (ru — по умолчанию, en),
   одно сообщение `app_title` на стартовой странице.
@@ -104,6 +104,9 @@ cargo test --workspace` зелёные; `cargo tree -p mpt-core -e normal` не 
 - `just check` = `cargo fmt --check` + clippy `-D warnings` + `cargo test --workspace` +
   `pnpm lint` + `pnpm check` + `pnpm test` + `gen-check` + проверка внешних ссылок (T-001.3).
 - Рецепты работают на Windows (`set windows-shell` или кроссплатформенные команды).
+- Из T-001.3: `just check` выполняет `pnpm build && pnpm check:offline` (скрипт требует готовый
+  `build/`). Проверка лицензий npm — по `--prod` (ADR-24); dev-цепочка содержит разрешительные
+  BlueOak-1.0.0 и Apache-2.0 WITH LLVM-exception — добавить их в allowlist для dev или не проверять dev.
 - `.github/workflows/ci.yml`: матрица ubuntu-24.04 / windows-latest / macos-latest, системные
   зависимости Tauri по официальному списку prerequisites, кэш cargo и pnpm,
   `pnpm install --frozen-lockfile`, `just check`. Actions — с зафиксированными версиями.

@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+@import './lib/ui/fonts.css';
+@import './lib/ui/tokens.css';
+
+@layer base {
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+}

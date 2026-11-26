@@ -1,0 +1,72 @@
+/*
+ * Локальные шрифты (ADR-15). Файлы лежат в static/fonts/ вместе с лицензиями (OFL-1.1);
+ * CSP разрешает только `font-src 'self' data:`, поэтому никаких внешних URL.
+ *
+ * Andika 7.000 (SIL Global) — шрифт по умолчанию: латиница, кириллица, IPA.
+ * OpenDyslexic 0.990 (Italic/BoldItalic — 0.950) — опция комфорта; недостающие в нём символы берутся из Andika
+ * через стек `font-family` (см. tokens.css).
+ */
+
+@font-face {
+  font-family: 'Andika';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/andika/Andika-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Andika';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/andika/Andika-Italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Andika';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/andika/Andika-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Andika';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/andika/Andika-BoldItalic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/opendyslexic/OpenDyslexic-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/opendyslexic/OpenDyslexic-Italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/opendyslexic/OpenDyslexic-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'OpenDyslexic';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/opendyslexic/OpenDyslexic-BoldItalic.woff2') format('woff2');
+}

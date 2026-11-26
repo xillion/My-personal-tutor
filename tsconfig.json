@@ -1,10 +1,13 @@
 {
   // SvelteKit 3: базовый конфиг генерирует `svelte-kit sync` в node_modules/$app/tsconfig.json
   // (verbatimModuleSyntax, isolatedModules, moduleResolution bundler и т. п.).
-  // Алиасы путей задаются в опциях плагина sveltekit() в vite.config.ts (`alias`), не здесь.
+  // Алиасы путей задаются в опциях плагина sveltekit() в vite.config.ts (`alias`), не здесь;
+  // `#lib/*` — subpath imports Node в поле `imports` package.json (замена `$lib` в Kit 3).
   "extends": "$app/tsconfig",
   "include": ["src", "test", "*"],
-  "exclude": ["src/service-worker"],
+  // server.js Paraglide — серверная часть (AsyncLocalStorage, node:async_hooks), в SPA не
+  // используется и требует @types/node.
+  "exclude": ["src/service-worker", "src/lib/paraglide/server.js"],
   "compilerOptions": {
     "strict": true,
     "noUncheckedIndexedAccess": true,

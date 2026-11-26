@@ -1,0 +1,24 @@
+# Артефакты сборки и зависимости
+build/
+.svelte-kit/
+target/
+dist/
+node_modules/
+src-tauri/gen/
+src-tauri/target/
+pnpm-lock.yaml
+Cargo.lock
+
+# Сгенерированный код (ADR-23): форматтер не должен создавать дифф после `just gen`
+src/lib/ipc/bindings.ts
+schemas/
+src/lib/paraglide/
+project.inlang/cache/
+
+# Бинарные/вендорные файлы шрифтов и их лицензии (как в дистрибутивах)
+static/fonts/
+
+# Документация и Rust форматируются своими средствами
+*.md
+*.rs
+.claude/
