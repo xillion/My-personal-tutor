@@ -102,6 +102,9 @@ jobs:
       # без установщика, CSP действует (в отличие от `tauri dev`). Артефакт — по SHA коммита.
       - name: Build Windows spike binary (debug, feature spikes)
         if: runner.os == 'Windows'
+        # Рецепт сам задаёт переменную (`[env]`); здесь — явно, чтобы шаг не зависел от justfile.
+        env:
+          VITE_MPT_SPIKES: '1'
         run: just build-spikes
 
       - name: Upload Windows spike binary

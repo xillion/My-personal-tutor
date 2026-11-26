@@ -20,7 +20,10 @@ dev:
 build:
     pnpm tauri build
 
-# Debug-сборка со спайк-командами без установщиков — для ручных прогонов T-004 (CSP действует)
+# Debug-сборка со спайк-командами без установщиков — для ручных прогонов T-004 (CSP действует).
+# VITE_MPT_SPIKES=1 открывает страницу /dev/spikes вне `vite dev` (src/lib/features/dev/gate.ts);
+# атрибут `[env]` задаёт переменную одинаково для sh и pwsh.
+[env("VITE_MPT_SPIKES", "1")]
 build-spikes:
     pnpm tauri build --debug --no-bundle --features spikes
 

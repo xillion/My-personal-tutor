@@ -2,6 +2,7 @@
 //
 // Фичи импортируют только `#lib/ipc/client.js`: сгенерированный `bindings.ts` напрямую не
 // используется, чтобы все вызовы проходили через `call()` и нормализацию ошибок.
+import { convertFileSrc } from '@tauri-apps/api/core';
 import { m } from '#lib/paraglide/messages.js';
 import { commands, type AppError, type AppErrorCode, type AppInfoDto } from './bindings.js';
 
@@ -84,4 +85,12 @@ export function errorMessage(code: AppErrorCode): string {
       return exhaustive;
     }
   }
+}
+
+/**
+ * URL медиафайла для `<audio>`/`<img>` по абсолютному пути, который вернул Rust (ADR-11).
+ * Работает только для путей внутри asset scope (`$APPDATA/courses/**`, §4a).
+ */
+export function mediaSrc(path: string): string {
+  return convertFileSrc(path);
 }

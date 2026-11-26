@@ -59,6 +59,7 @@
   "dependencies": {
     "@internationalized/date": "^3.12.4",
     "@tauri-apps/api": "^2.12.5",
-    "bits-ui": "^2.22.0"
+    "bits-ui": "^2.22.0",
+    "katex": "^0.19.1"
   }
 }
