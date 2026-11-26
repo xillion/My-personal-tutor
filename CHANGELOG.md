@@ -26,7 +26,15 @@
   лицензии), `deny.toml` и `pnpm check:licenses` (ADR-24), CI GitHub Actions на ubuntu-24.04 /
   windows-latest / macos-latest + actionlint; actions закреплены по SHA. CI зелёный на трёх ОС. (T-001.4)
 
+- Типизированный IPC (T-002): `tauri-specta`/`specta` (ADR-23), `AppError`/`AppErrorCode`
+  (`app.internal`, `app.invalid_argument`), команды `app_ping`, `app_info`; `just gen` →
+  `src/lib/ipc/bindings.ts`, `gen-check` ловит и неотслеживаемые файлы; `src/lib/ipc/client.ts`
+  (`call()`, `errorMessage()` с исчерпывающим switch); страница `/dev` (только DEV); проверка
+  полноты переводов в `pnpm check` (KI-005); ESLint запрещает импорт `bindings` вне `src/lib/ipc`.
+
 ### Fixed
+- Windows: тестовые бинари `mpt-app` падали с STATUS_ENTRYPOINT_NOT_FOUND — манифест приложения
+  (Common-Controls v6) теперь встраивается во все цели, а не только в bin. (T-002)
 - `prepare` больше не глотает ошибки `svelte-kit sync`/Paraglide (KI-008). (T-001.4)
 - `tauri dev`: scoped-стили не применялись до первого HMR — обход в `vite.config.ts` (KI-001). (T-001.3)
 
