@@ -54,7 +54,7 @@ cargo test --workspace` зелёные; `cargo tree -p mpt-core -e normal` не 
 и `tauri`; `unwrap()` в не-тестовом коде даёт ошибку clippy с `-D warnings` (проверено один раз
 вручную, отражено в PR).
 
-#### [ ] T-001.2 Tauri 2 + SvelteKit SPA — `svelte-ui` (+ `rust-core` для `src-tauri`) · M
+#### [x] T-001.2 Tauri 2 + SvelteKit SPA — `svelte-ui` (+ `rust-core` для `src-tauri`) · M
 Зависит от: T-001.1
 - Скаффолд `create-tauri-app` (SvelteKit + TS) во временный каталог с переносом в корень;
   версии подняты до ADR-23 (Kit 3, Vite 8, TS 6). `src-tauri` — пакет `mpt-app` в workspace,
@@ -85,6 +85,10 @@ cargo test --workspace` зелёные; `cargo tree -p mpt-core -e normal` не 
 - ESLint flat config + `eslint-plugin-svelte` + Prettier; `no-restricted-imports` для
   `@tauri-apps/api/core` вне `src/lib/ipc/**`; игнор `src/lib/ipc/bindings.ts` и `schemas/`.
 - Vitest + jsdom + `@testing-library/svelte`; скрипты `lint`, `check` (svelte-check), `test`.
+- Известная проблема из T-001.2: в `tauri dev` при первой загрузке scoped `<style>` компонента не
+  применяется (vite-plugin-svelte 7.3 + Vite 8 отдаёт исходник `.svelte` вместо CSS для
+  `?svelte&type=style&lang.css`; после первого HMR и в production всё корректно). Разобраться
+  (обновление плагина / issue upstream) и проверить на стартовой странице после подключения Tailwind.
 
 Приёмка: `pnpm lint && pnpm check && pnpm test` зелёные; тест Vitest через ESLint Node API:
 файл-фикстура с импортом `@tauri-apps/api/core` в `src/lib/features/x/` даёт ошибку, тот же
@@ -487,7 +491,8 @@ Vitest: `katex-trust` разрешает `\htmlData` и запрещает `\hre
 ### [ ] T-408 Релизная сборка 0.1 — `architect` · S
 Зависит от: T-407
 - Подписанные сборки (по возможности), `tauri-plugin-updater` (выключен по умолчанию),
-  CI-сборка установщиков на теге (перенесено из T-001); Linux — AppImage со встроенным
+  CI-сборка установщиков на теге (перенесено из T-001); собственные иконки приложения вместо
+  временного логотипа Tauri из шаблона (`src-tauri/icons/`, T-001.2); Linux — AppImage со встроенным
   GStreamer (ADR-24), `.deb`/`.rpm` с зависимостями на декодер AAC,
 - ручной прогон спайков T-004 и смоук-чек-листа на macOS (ADR-24: до релиза нужно устройство
   или доступ к нему; без прогона macOS-сборка помечается «экспериментальная»),

@@ -1,0 +1,37 @@
+[package]
+name = "mpt-app"
+description = "Tauri shell of My Personal Tutor: commands, state, capabilities."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+# Отдельные бинари (например, `gen_bindings` в T-002) не должны мешать `cargo run`/`tauri dev`.
+default-run = "my-personal-tutor"
+
+[lib]
+# Имя `mpt_app` фиксирует ADR-23 (`mpt_app::specta_builder()`).
+# staticlib/cdylib нужны мобильным сборкам Tauri (Фаза 8), rlib — бинарям этого пакета.
+name = "mpt_app"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[[bin]]
+# Имя бинаря отличается от имени lib: при совпадении на Windows конфликтуют .pdb-файлы
+# (https://github.com/rust-lang/cargo/issues/8519).
+name = "my-personal-tutor"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build.workspace = true
+
+[dependencies]
+mpt-importer.workspace = true
+mpt-services.workspace = true
+mpt-storage.workspace = true
+# `protocol-asset`: asset protocol для медиа курсов (`app.security.assetProtocol`, ADR-11).
+# Tauri CLI сверяет этот список фич с tauri.conf.json.
+tauri = { workspace = true, features = ["protocol-asset"] }
+
+[lints]
+workspace = true

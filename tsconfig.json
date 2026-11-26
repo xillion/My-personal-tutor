@@ -1,0 +1,13 @@
+{
+  // SvelteKit 3: базовый конфиг генерирует `svelte-kit sync` в node_modules/$app/tsconfig.json
+  // (verbatimModuleSyntax, isolatedModules, moduleResolution bundler и т. п.).
+  // Алиасы путей задаются в опциях плагина sveltekit() в vite.config.ts (`alias`), не здесь.
+  "extends": "$app/tsconfig",
+  "include": ["src", "test", "*"],
+  "exclude": ["src/service-worker"],
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "sourceMap": true
+  }
+}

@@ -1,10 +1,18 @@
-# Rust
+# Rust (`target/` без ведущего слэша покрывает и src-tauri/target)
 target/
+
+# Tauri: JSON-схемы capabilities, их генерирует tauri-build при каждой сборке
+# (нужны только для автодополнения в редакторе). gen/android и gen/apple (Фаза 8) коммитятся.
+src-tauri/gen/schemas/
 
 # Node / SvelteKit
 node_modules/
 build/
 .svelte-kit/
+vite.config.ts.timestamp-*
+.env
+.env.*
+!.env.example
 
 # Сборки курсов и кэш компилятора
 dist/

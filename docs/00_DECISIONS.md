@@ -336,9 +336,12 @@ TypeScript 6, Paraglide 3, Vitest 5). Node 20 из README снят с подде
 
 **Решение.**
 - **Toolchain:** `rust-toolchain.toml` с точной stable-версией (на 2026-11-26 — `1.100.0`,
-  компоненты `rustfmt`, `clippy`), edition 2024, resolver 3. Node — **24 LTS** (`.node-version`,
+  компоненты `rustfmt`, `clippy`), edition 2024, resolver 3. Node — **24 LTS** (`.node-version` и `.nvmrc` для nvm,
   `engines.node`), pnpm через `packageManager` в `package.json` (на 2026-11-26 — 12.x).
   Toolchain обновляется отдельным PR, а не попутно.
+- **SvelteKit 3** не читает `svelte.config.js` (ошибка `config_file_unsupported`): конфигурация
+  Kit передаётся в `sveltekit({...})` в `vite.config.ts`, `tsconfig.json` расширяет
+  `$app/tsconfig`. TypeScript держится на 6.x (Kit 3 требует `^6`), переход на 7 — отдельным PR.
 - **Lock-файлы** `Cargo.lock` и `pnpm-lock.yaml` коммитятся. В CI — `pnpm install --frozen-lockfile`.
 - **Мажорные версии, сверенные 2026-11-26** (точные — в lock-файлах):
 

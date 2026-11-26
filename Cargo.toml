@@ -1,6 +1,5 @@
 [workspace]
-# src-tauri (пакет mpt-app) добавится в members в T-001.2.
-members = ["crates/*"]
+members = ["crates/*", "src-tauri"]
 resolver = "3"
 
 [workspace.package]
@@ -13,9 +12,14 @@ publish = false
 
 [workspace.dependencies]
 # Внутренние крейты. Направление зависимостей — docs/01_ARCHITECTURE.md §2.
-# mpt-storage / mpt-importer / mpt-services добавятся сюда в T-001.2, когда их начнёт
-# использовать src-tauri (cargo предупреждает о неиспользуемых workspace-зависимостях).
 mpt-core = { path = "crates/mpt-core" }
+mpt-storage = { path = "crates/mpt-storage" }
+mpt-importer = { path = "crates/mpt-importer" }
+mpt-services = { path = "crates/mpt-services" }
+
+# Внешние. Tauri — только 2.x (ADR-23); точные версии — в Cargo.lock.
+tauri = "2.12"
+tauri-build = "2.7"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

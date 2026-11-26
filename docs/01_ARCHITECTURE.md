@@ -10,7 +10,7 @@
 ├─ CLAUDE.md
 ├─ justfile                      # единая точка входа для команд
 ├─ Cargo.toml                    # workspace
-├─ package.json / pnpm-workspace.yaml
+├─ package.json / vite.config.ts   # SvelteKit 3: конфиг Kit в vite.config.ts
 ├─ crates/
 │  ├─ mpt-core/                  # домен, без IO и без Tauri
 │  │  └─ src/{model,markup,tokenize,validate,quiz,srs,recognize,cards}/
@@ -145,6 +145,8 @@ cmd quiz_finish(session_id) → QuizSummary
   connect-src ipc: http://ipc.localhost; object-src 'none'; frame-src 'none'`.
   `'unsafe-inline'` в `style-src` нужен KaTeX (inline-стили); `unsafe-eval` запрещён.
   `frame-src` расширяется для `mptgame:` только в Фазе 7.
+- В `tauri dev` на десктопе CSP не применяется (WebView грузит `devUrl` напрямую). Проверки CSP
+  (спайки T-004, E2E T-007) выполняются на сборке `tauri build --debug`, а не только в dev.
 - Dev-маршруты (`/dev`, `/dev/spikes`, `/dev/ui`) доступны только при `import.meta.env.DEV`;
   спайк-команды Rust — за cargo-feature `spikes`, выключенной по умолчанию и в релизе.
 
