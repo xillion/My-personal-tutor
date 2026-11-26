@@ -1,3 +1,19 @@
 {
-  "app_title": "My Personal Tutor"
+  "app_title": "My Personal Tutor",
+  "error_app_internal": "Oops, something went wrong. Please try again a little later.",
+  "error_app_invalid_argument": "Looks like something is missing here. Check it and try again.",
+  "dev_title": "Developer page",
+  "dev_ping_title": "Rust connection check",
+  "dev_ping_label": "Message",
+  "dev_ping_button": "Ping",
+  "dev_ping_reply": "Reply: {reply}",
+  "dev_info_title": "About the app",
+  "dev_info_version": "Version",
+  "dev_info_platform": "Platform",
+  "dev_info_data_dir": "Data directory",
+  "dev_info_courses_dir": "Courses directory",
+  "dev_info_built_at": "Built at",
+  "dev_info_reload": "Refresh",
+  "dev_loading": "Loading…",
+  "dev_error_code": "Code: {code}"
 }

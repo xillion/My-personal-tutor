@@ -1,3 +1,19 @@
 {
-  "app_title": "Мой личный репетитор"
+  "app_title": "Мой личный репетитор",
+  "error_app_internal": "Ой, что-то пошло не так. Попробуй ещё раз чуть позже.",
+  "error_app_invalid_argument": "Кажется, тут чего-то не хватает. Проверь и попробуй ещё раз.",
+  "dev_title": "Страница разработчика",
+  "dev_ping_title": "Проверка связи с Rust",
+  "dev_ping_label": "Сообщение",
+  "dev_ping_button": "Ping",
+  "dev_ping_reply": "Ответ: {reply}",
+  "dev_info_title": "О приложении",
+  "dev_info_version": "Версия",
+  "dev_info_platform": "Платформа",
+  "dev_info_data_dir": "Каталог данных",
+  "dev_info_courses_dir": "Каталог курсов",
+  "dev_info_built_at": "Время сборки",
+  "dev_info_reload": "Обновить",
+  "dev_loading": "Загрузка…",
+  "dev_error_code": "Код: {code}"
 }
