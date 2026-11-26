@@ -1,0 +1,99 @@
+# My Personal Tutor — инструкции для Claude Code
+
+Офлайн-first приложение для детей (6–14 лет, эталонный контент — 8–11) для изучения школьных предметов: умная читалка
+с караоке, активный словарь с интервальным повторением (FSRS), квизы и экзамены; позже —
+графический планшет, ИИ-генерация упражнений, мини-игры. Первые предметы — английский и математика.
+
+**Стек:** Tauri 2 · Rust (workspace) · Svelte 5 (runes) · SvelteKit SPA · TypeScript strict ·
+Tailwind v4 · Bits UI · SQLite (`rusqlite`) · `fsrs` · KaTeX · Paraglide.
+
+## Прочитай перед работой
+
+| Документ | Когда читать |
+|----------|--------------|
+| `docs/00_DECISIONS.md` | всегда, перед любой задачей: обязательные решения (ADR) |
+| `docs/01_ARCHITECTURE.md` | структура, слои, потоки данных, IPC |
+| `docs/02_COURSE_FORMAT.md` | всё, что касается контента, компилятора, импорта |
+| `docs/03_DATA_MODEL.md` | БД, миграции, прогресс |
+| `docs/04_ROADMAP.md` | список задач, зависимости, критерии приёмки |
+| `docs/05_TESTING.md` | стратегия тестов и Definition of Done |
+
+## Золотые правила
+
+1. **Rust владеет логикой.** Парсинг, валидация, проверка ответов, SRS, распознавание — в
+   `crates/mpt-core`. Фронтенд рендерит DTO и шлёт события. Исключение — ADR-11.
+2. **`mpt-core` без IO и без Tauri.** Детерминированный код, тесты на всё.
+3. **Команды Tauri тонкие** (5–30 строк): состояние → сервис → DTO.
+4. **Контракты неприкосновенны без `architect`:** типы `mpt-core::model`, IPC, миграции,
+   формат курса, протокол игр. Изменение = ADR/спека + код в одном PR.
+5. **Только сгенерированный IPC.** Импорт `@tauri-apps/api/core` разрешён лишь в `src/lib/ipc/`.
+   После изменения команд — `just gen`.
+6. **Правильные ответы не уходят во фронтенд** до проверки в Rust.
+7. **Дети — пользователи.** Зоны нажатия ≥ 48 px, все строки через i18n, звук и анимации
+   отключаемы, опасные действия за `ParentGate`, никакой телеметрии и личных данных в сеть.
+8. **Безопасность контента:** архивы и игры — недоверенные данные (ADR-17, ADR-18).
+9. **Не добавляй зависимости молча.** Новая зависимость — строка в описании PR с причиной;
+   тяжёлые (> 1 МБ в бандле, нативные) — только с согласия `architect`.
+10. **Не угадывай API библиотек.** Сверься с документацией (docs.rs, официальные сайты) или
+    кодом в `~/.cargo/registry` / `node_modules`. Версии `tauri-specta`/`specta` зафиксированы точно.
+
+## Команды
+
+```bash
+just dev            # tauri dev
+just check          # fmt + clippy + cargo test + lint + svelte-check + vitest + проверка gen
+just test           # только тесты
+just gen            # bindings.ts (tauri-specta) + schemas/*.json (schemars)
+just course-sample  # mptc build courses/sample-* -> dist/courses/*.mpt
+just e2e            # WebdriverIO + tauri-driver (Linux/Windows)
+cargo run -p mptc -- check courses/sample-en
+```
+
+Если `justfile` ещё нет (до T-001) — его создание входит в T-001.
+
+## Структура (кратко)
+
+```
+crates/mpt-core      домен: model, markup, tokenize, validate, quiz, srs, cards, recognize
+crates/mpt-storage   SQLite + migrations
+crates/mpt-importer  безопасный импорт/обновление курсов
+crates/mpt-services  tts, llm, secrets, кэши
+crates/mptc          CLI-компилятор курсов
+src-tauri            команды, состояние, capabilities, протоколы
+src/lib/ipc          bindings.ts (generated) + client.ts
+src/lib/ui           дизайн-система
+src/lib/features/*   library, reader, player, vocab, quiz, review, profile, settings, ...
+courses/             исходники эталонных курсов
+```
+
+## Стиль кода
+
+- **Rust:** edition 2021+, `thiserror` для ошибок крейтов, `anyhow` — только в `mptc`;
+  без `unwrap()`/`expect()` вне тестов (кроме инвариантов с комментарием); `tracing` для логов.
+- **TS/Svelte:** только runes (`$state`, `$derived`, `$effect`, `$props`); состояние фич — классы
+  в `*.svelte.ts`; без `any`; компоненты ≤ ~200 строк, иначе разбить.
+- **Тесты рядом с кодом**; имена тестов описывают поведение (`rejects_zip_slip_paths`).
+- **Коммиты:** Conventional Commits (`feat(reader): ...`), в теле — `Task: T-xxx`.
+
+## Процесс работы агентов
+
+Основная сессия — **оркестратор**. Она не пишет большие объёмы кода сама, а ведёт задачу по
+процессу из `.claude/commands/task.md` (`/task T-xxx`):
+
+1. Проверить, что зависимости задачи `[x]`; отметить задачу `[~]` в `docs/04_ROADMAP.md`.
+2. Создать ветку `task/T-xxx-slug`.
+3. Если задача L или затрагивает контракт — сначала `architect` (план/контракт).
+4. Реализация — профильный агент (`rust-core`, `svelte-ui`, `content-pipeline`, `content-author`).
+5. `qa-tester` — тесты по критериям приёмки, прогон `just check`.
+6. `code-reviewer` — независимое ревью диффа (не видел процесс написания).
+7. Исправить `blocker`/`major`, повторить 5–6 при необходимости.
+8. Обновить `04_ROADMAP.md` (`[x]`), `CHANGELOG.md`, закоммитить.
+
+Субагенты: `.claude/agents/`. Команды: `/task`, `/phase-plan`, `/review`, `/adr`.
+
+## Когда остановиться и спросить человека
+
+- Приёмка задачи противоречит ADR или другой задаче.
+- Нужно решение, которое трудно откатить (схема БД после релиза, формат пакета, лицензия контента).
+- Спайк T-004 показал, что выбранный подход не работает на одной из ОС.
+- Требуется платный сервис, ключ API или доступ к внешней системе.

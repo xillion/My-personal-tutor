@@ -1,0 +1,21 @@
+# Rust
+target/
+
+# Node / SvelteKit
+node_modules/
+build/
+.svelte-kit/
+
+# Сборки курсов и кэш компилятора
+dist/
+.mptc-cache/
+
+# Локальные настройки Claude Code (не коммитятся)
+.claude/settings.local.json
+.claude/.headroom*
+
+# ОС и редакторы
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
