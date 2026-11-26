@@ -23,6 +23,16 @@ const TEMPLATE_DYNAMIC_IMPORT = "ImportExpression[source.type='TemplateLiteral']
 const TAURI_GLOBALS = 'MemberExpression[property.name=/^__TAURI(_INTERNALS)?__$/]';
 
 /**
+ * Фичи ходят только через `#lib/ipc/client.js` (ADR-23): сгенерированные `bindings.ts` — деталь
+ * реализации `src/lib/ipc/`. Шаблоны в синтаксисе gitignore ловят и алиас (`#lib/ipc/bindings.js`),
+ * и относительные пути (`../ipc/bindings`, `./ipc/bindings.ts`).
+ */
+const BINDINGS_MESSAGE =
+  'Generated IPC bindings are internal to src/lib/ipc/. Import from #lib/ipc/client.js instead.';
+const BINDINGS_PATTERNS = ['**/ipc/bindings', '**/ipc/bindings.*'];
+const BINDINGS_DYNAMIC_IMPORT = 'ImportExpression[source.value=/(^|.)ipc.bindings($|[.])/]';
+
+/**
  * @param {{ allowMocks: boolean }} options
  * @returns {import('eslint').Linter.RulesRecord}
  */
@@ -36,7 +46,10 @@ function ipcBoundaryRules({ allowMocks }) {
       'error',
       {
         paths: [{ name: '@tauri-apps/api', message: IPC_BOUNDARY_MESSAGE }],
-        patterns: [{ group, message: IPC_BOUNDARY_MESSAGE }],
+        patterns: [
+          { group, message: IPC_BOUNDARY_MESSAGE },
+          { group: BINDINGS_PATTERNS, message: BINDINGS_MESSAGE },
+        ],
       },
     ],
     // no-restricted-imports не видит динамический `import('...')`.
@@ -45,6 +58,7 @@ function ipcBoundaryRules({ allowMocks }) {
       { selector: TAURI_DYNAMIC_IMPORT, message: IPC_BOUNDARY_MESSAGE },
       { selector: TEMPLATE_DYNAMIC_IMPORT, message: IPC_BOUNDARY_MESSAGE },
       { selector: TAURI_GLOBALS, message: IPC_BOUNDARY_MESSAGE },
+      { selector: BINDINGS_DYNAMIC_IMPORT, message: BINDINGS_MESSAGE },
     ],
   };
 }

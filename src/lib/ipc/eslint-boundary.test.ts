@@ -57,4 +57,33 @@ describe('ESLint IPC boundary', () => {
     expect(await boundaryErrors(code, 'src/lib/features/x/fixture.test.ts')).toEqual([]);
     expect(await boundaryErrors(code, 'src/lib/features/x/fixture.ts')).toHaveLength(1);
   });
+
+  it('rejects generated bindings imports outside src/lib/ipc', async () => {
+    const specifiers = [
+      '#lib/ipc/bindings.js',
+      '#lib/ipc/bindings',
+      '../ipc/bindings.js',
+      '../../lib/ipc/bindings',
+      './ipc/bindings.ts',
+    ];
+    for (const specifier of specifiers) {
+      const code = `import { commands } from '${specifier}';\nexport { commands };\n`;
+      const errors = await boundaryErrors(code, 'src/lib/features/x/fixture.ts');
+      expect(errors, specifier).toHaveLength(1);
+      expect(errors[0]?.message).toContain('#lib/ipc/client.js');
+      expect(
+        await boundaryErrors(code, 'src/lib/features/x/fixture.test.ts'),
+        specifier,
+      ).toHaveLength(1);
+    }
+    const lazy = "export const lazy = () => import('#lib/ipc/bindings.js');\n";
+    expect(await boundaryErrors(lazy, 'src/routes/fixture.ts')).toHaveLength(1);
+  });
+
+  it('allows the IPC client outside and bindings inside src/lib/ipc', async () => {
+    const client = "import { call } from '#lib/ipc/client.js';\nexport { call };\n";
+    expect(await boundaryErrors(client, 'src/lib/features/x/fixture.ts')).toEqual([]);
+    const bindings = "import { commands } from './bindings.js';\nexport { commands };\n";
+    expect(await boundaryErrors(bindings, 'src/lib/ipc/fixture.ts')).toEqual([]);
+  });
 });

@@ -117,8 +117,13 @@ mod tests {
     #[test]
     fn built_at_ms_is_plausible_and_fits_js_number() {
         let ms = built_at_ms();
-        // После 2020-01-01 и в пределах Number.MAX_SAFE_INTEGER (ADR-23).
-        assert!(ms > 1_577_836_800_000, "{ms}");
+        // Не раньше SOURCE_DATE_EPOCH (если задан при сборке: Nix ставит 1980) или эпохи
+        // и в пределах Number.MAX_SAFE_INTEGER (ADR-23).
+        let lower = option_env!("SOURCE_DATE_EPOCH")
+            .and_then(|s| s.trim().parse::<i64>().ok())
+            .and_then(|secs| secs.checked_mul(1000))
+            .unwrap_or(0);
+        assert!(ms >= lower.max(0), "{ms} < {lower}");
         assert!(ms < (1_i64 << 53), "{ms}");
     }
 
