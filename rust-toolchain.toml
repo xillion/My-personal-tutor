@@ -1,0 +1,5 @@
+# ADR-23: точная stable-версия. Обновляется отдельным PR.
+[toolchain]
+channel = "1.100.0"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

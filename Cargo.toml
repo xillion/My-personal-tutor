@@ -1,0 +1,28 @@
+[workspace]
+# src-tauri (пакет mpt-app) добавится в members в T-001.2.
+members = ["crates/*"]
+resolver = "3"
+
+[workspace.package]
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.100"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/xillion/My-personal-tutor"
+publish = false
+
+[workspace.dependencies]
+# Внутренние крейты. Направление зависимостей — docs/01_ARCHITECTURE.md §2.
+# mpt-storage / mpt-importer / mpt-services добавятся сюда в T-001.2, когда их начнёт
+# использовать src-tauri (cargo предупреждает о неиспользуемых workspace-зависимостях).
+mpt-core = { path = "crates/mpt-core" }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+unwrap_used = "warn"
+expect_used = "warn"
+panic = "warn"
+dbg_macro = "warn"
+todo = "warn"

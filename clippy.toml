@@ -1,0 +1,3 @@
+# ADR-23: unwrap/expect запрещены в рабочем коде, но разрешены в тестах.
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true

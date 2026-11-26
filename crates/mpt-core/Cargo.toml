@@ -1,0 +1,12 @@
+[package]
+name = "mpt-core"
+description = "Domain core of My Personal Tutor: model, markup, validation, quizzes, SRS (no IO)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true

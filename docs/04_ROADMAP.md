@@ -41,7 +41,7 @@ T-001, T-004, T-005 разбиты на подзадачи; команды из 
 Общая приёмка: `just dev` открывает окно; `just check` зелёный локально (Linux) и в CI на
 ubuntu/windows/macos. Сборка артефактов на теге перенесена в T-408: до релиза её нечем проверить.
 
-#### [ ] T-001.1 Cargo workspace и toolchain — `rust-core` · S
+#### [x] T-001.1 Cargo workspace и toolchain — `rust-core` · S
 Зависит от: T-000
 - `rust-toolchain.toml`, корневой `Cargo.toml` (edition 2024, resolver 3, `[workspace.package]`,
   `[workspace.dependencies]`, `[workspace.lints]`), `rustfmt.toml`, `clippy.toml` — всё по ADR-23;
@@ -59,6 +59,10 @@ cargo test --workspace` зелёные; `cargo tree -p mpt-core -e normal` не 
 - Скаффолд `create-tauri-app` (SvelteKit + TS) во временный каталог с переносом в корень;
   версии подняты до ADR-23 (Kit 3, Vite 8, TS 6). `src-tauri` — пакет `mpt-app` в workspace,
   lib + bin (`run()`, `specta_builder()` — заглушка до T-002).
+- Добавить `mpt-storage`, `mpt-importer`, `mpt-services` в `[workspace.dependencies]` и в
+  `[dependencies]` `mpt-app` (в T-001.1 их нет: cargo 1.100 предупреждает о неиспользуемых
+  workspace-зависимостях). Временную dev-зависимость этих крейтов на `mpt-core` перевести в
+  `[dependencies]` в первой задаче, где крейт начинает использовать `mpt-core`.
 - `adapter-static` с `fallback: 'index.html'`, `src/routes/+layout.ts`: `export const ssr = false`.
   `tsconfig`: `strict`, `noUncheckedIndexedAccess`.
 - `tauri.conf.json`: identifier `dev.rnd-center.mpt` (ADR-24; после первого релиза не меняется),

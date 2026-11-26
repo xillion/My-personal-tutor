@@ -1,0 +1,16 @@
+[package]
+name = "mpt-services"
+description = "Services (TTS, LLM, secrets, caches) for My Personal Tutor."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+# Normal-зависимость на mpt-core появится вместе с первым кодом, который её использует.
+[dev-dependencies]
+mpt-core.workspace = true
