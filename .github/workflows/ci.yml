@@ -100,15 +100,17 @@ jobs:
 
       # Debug-сборка со спайк-командами для ручного прогона на Windows 10/11 (T-004.3):
       # без установщика, CSP действует (в отличие от `tauri dev`). Артефакт — по SHA коммита.
+      # Только для push (main, task/**) и ручного запуска: на pull_request тот же коммит уже
+      # собран push-запуском, вторая сборка и артефакт не нужны.
       - name: Build Windows spike binary (debug, feature spikes)
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && github.event_name != 'pull_request'
         # Рецепт сам задаёт переменную (`[env]`); здесь — явно, чтобы шаг не зависел от justfile.
         env:
           VITE_MPT_SPIKES: '1'
         run: just build-spikes
 
       - name: Upload Windows spike binary
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: mpt-spikes-windows-debug-${{ github.sha }}

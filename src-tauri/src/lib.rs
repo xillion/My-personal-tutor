@@ -248,6 +248,8 @@ mod tests {
         let text = read_repo_file(SPIKE_BINDINGS_PATH);
         for needle in [
             "spikePrepareMedia",
+            "spikeMediaBytes",
+            "typedError<ArrayBuffer, AppError>",
             "spikeTtsVoices",
             "spikeTtsSpeak",
             "\"spike_tts_speak\"",

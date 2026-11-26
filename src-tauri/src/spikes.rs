@@ -34,6 +34,15 @@ pub const SPIKE_MEDIA: [EmbeddedMedia; 2] = [
     },
 ];
 
+/// Находит встроенный тестовый файл по точному имени (`speech.m4a`, `speech.ogg`).
+///
+/// Имя сравнивается побайтно со списком `media`: пути, другой регистр и пробелы не
+/// принимаются, поэтому произвольный файл через эту функцию не прочитать.
+#[must_use]
+pub fn find_media<'a>(media: &'a [EmbeddedMedia], name: &str) -> Option<&'a EmbeddedMedia> {
+    media.iter().find(|m| m.name == name)
+}
+
 /// Файл, записанный [`write_media`].
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct WrittenMedia {
@@ -174,6 +183,13 @@ pub fn backend_rate(multiplier: f32, range: RateRange) -> Option<f32> {
     Some(value.clamp(range.min, range.max))
 }
 
+/// Множитель скорости из аргумента команды: `None` (в TS — `null`) — обычная скорость `1.0`,
+/// затем [`backend_rate`].
+#[must_use]
+pub fn backend_rate_or_normal(multiplier: Option<f32>, range: RateRange) -> Option<f32> {
+    backend_rate(multiplier.unwrap_or(1.0), range)
+}
+
 /// Максимальная длина текста для `spike_tts_speak`, символов.
 pub const MAX_SPEAK_CHARS: usize = 1000;
 
@@ -273,6 +289,44 @@ mod tests {
     fn backend_rate_rejects_non_finite_multiplier() {
         for bad in [f32::NAN, f32::INFINITY, f32::NEG_INFINITY] {
             assert_eq!(backend_rate(bad, SPEECHD), None);
+        }
+    }
+
+    #[test]
+    fn backend_rate_or_normal_treats_none_as_normal_speed() {
+        for range in [SPEECHD, WINRT, AVFOUNDATION] {
+            assert_eq!(backend_rate_or_normal(None, range), Some(range.normal));
+            assert_eq!(
+                backend_rate_or_normal(Some(2.0), range),
+                backend_rate(2.0, range)
+            );
+        }
+        assert_eq!(backend_rate_or_normal(Some(f32::NAN), WINRT), None);
+    }
+
+    #[test]
+    fn find_media_accepts_only_exact_embedded_names() {
+        assert_eq!(
+            find_media(&SPIKE_MEDIA, "speech.m4a").map(|m| m.mime),
+            Some("audio/mp4")
+        );
+        assert_eq!(
+            find_media(&SPIKE_MEDIA, "speech.ogg").map(|m| m.mime),
+            Some("audio/ogg")
+        );
+        for bad in [
+            "",
+            "speech",
+            "Speech.m4a",
+            " speech.m4a",
+            "speech.m4a ",
+            "./speech.m4a",
+            "_spike/speech.m4a",
+            "../spikes/speech.m4a",
+            "/etc/passwd",
+            ".speech.m4a.tmp",
+        ] {
+            assert!(find_media(&SPIKE_MEDIA, bad).is_none(), "{bad:?}");
         }
     }
 

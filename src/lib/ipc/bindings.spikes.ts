@@ -17,7 +17,21 @@ export const commands = {
 	 */
 	spikePrepareMedia: (options?: InvokeOptions) => typedError<SpikeMediaDto, AppError>(__TAURI_INVOKE("spike_prepare_media", undefined, options)),
 	/**
-	 *  Голоса системного TTS (крейт `tts`) и шкала скорости бэкенда.
+	 *  Байты встроенного тестового аудио `name` (`speech.m4a` или `speech.ogg`) — чтобы стенд
+	 *  строил `Blob` URL без `fetch` к asset-URL (его блокирует CSP `connect-src`). MIME —
+	 *  `audio/mp4` / `audio/ogg` (см. `spike_prepare_media`). Данные встроены в бинарник, ФС не
+	 *  читается.
+	 * 
+	 *  # Errors
+	 * 
+	 *  `app.invalid_argument`: имя не из фиксированного списка (сравнение точное, без путей).
+	 */
+	spikeMediaBytes: (name: string, options?: InvokeOptions) => typedError<ArrayBuffer, AppError>(__TAURI_INVOKE("spike_media_bytes", { name }, options)),
+	/**
+	 *  Голоса системного TTS (крейт `tts`) и шкала скорости бэкенда. Всегда заново запрашивает
+	 *  голоса у бэкенда и обновляет кеш, которым пользуется `spike_tts_speak`.
+	 * 
+	 *  Не делать `async`: WinRT/AVFoundation требуют главного потока, см. описание модуля.
 	 * 
 	 *  # Errors
 	 * 
@@ -27,7 +41,10 @@ export const commands = {
 	/**
 	 *  Произносит `text` голосом для языка `lang` (BCP 47: `en`, `ru-RU`) со скоростью `rate`
 	 *  (множитель, `1.0` — обычная, ограничивается `0.5…2`; `null` — обычная). Не ждёт
-	 *  окончания речи; прерывает текущую фразу.
+	 *  окончания речи; прерывает текущую фразу. Голоса — из кеша `spike_tts_voices` (если его
+	 *  ещё нет — один запрос к бэкенду).
+	 * 
+	 *  Не делать `async`: WinRT/AVFoundation требуют главного потока, см. описание модуля.
 	 * 
 	 *  # Errors
 	 * 

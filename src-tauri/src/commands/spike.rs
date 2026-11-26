@@ -9,7 +9,9 @@
 //! главном (UI) потоке. Это сознательно: WinRT (`MediaPlayer`) требует инициализированного
 //! COM-апартамента, AVFoundation рассчитан на главный поток, а `tts::Tts` внутри — `Rc`
 //! (крейт объявляет `Send`/`Sync` через `unsafe impl`). Экземпляр один, создаётся лениво при
-//! первом вызове, хранится в [`SpikeTts`] под `Mutex` и никогда не клонируется. Вызовы
+//! первом вызове, хранится в [`SpikeTts`] под `Mutex` и никогда не клонируется. Там же кеш
+//! списка голосов: его обновляет только `spike_tts_voices` (на Fedora speech-dispatcher
+//! отдаёт ~14 600 записей), `spike_tts_speak` берёт голоса из кеша. Вызовы
 //! быстрые: `speak` ставит текст в очередь синтезатора и не ждёт окончания речи. Первый вызов
 //! на Linux может ждать автозапуска speech-dispatcher (до ~1 с) — для спайка приемлемо.
 
@@ -20,8 +22,8 @@ use tauri::Manager;
 
 use crate::error::AppError;
 use crate::spikes::{
-    self, MAX_SPEAK_CHARS, RateRange, SPIKE_MEDIA, VoiceInfo, backend_rate, is_variant_voice,
-    select_voice,
+    self, MAX_SPEAK_CHARS, RateRange, SPIKE_MEDIA, VoiceInfo, backend_rate_or_normal, find_media,
+    is_variant_voice, select_voice,
 };
 
 /// Записанный тестовый медиафайл.
@@ -96,13 +98,39 @@ pub struct SpikeTtsSpeakDto {
     pub backend_rate: f32,
 }
 
-/// Ленивый экземпляр системного TTS (см. описание модуля).
+/// Ленивый экземпляр системного TTS и кеш его голосов (см. описание модуля).
 #[derive(Default)]
-pub struct SpikeTts(Mutex<Option<tts::Tts>>);
+pub struct SpikeTts(Mutex<Option<TtsState>>);
+
+/// Содержимое [`SpikeTts`] после первой инициализации.
+struct TtsState {
+    tts: tts::Tts,
+    /// Последний список голосов бэкенда; `None` — ещё не запрашивался.
+    voices: Option<Vec<tts::Voice>>,
+}
+
+impl TtsState {
+    /// Запрашивает голоса у бэкенда и кладёт их в кеш.
+    fn refresh_voices(&mut self) -> Result<&[tts::Voice], AppError> {
+        let voices = self
+            .tts
+            .voices()
+            .map_err(|err| tts_error("list voices", &err))?;
+        Ok(self.voices.insert(voices))
+    }
+
+    /// Голоса из кеша; при пустом кеше — один запрос к бэкенду.
+    fn cached_voices(&mut self) -> Result<&[tts::Voice], AppError> {
+        if self.voices.is_none() {
+            self.refresh_voices()?;
+        }
+        Ok(self.voices.as_deref().unwrap_or_default())
+    }
+}
 
 impl SpikeTts {
     /// Выполняет `f` с инициализированным TTS.
-    fn with<R>(&self, f: impl FnOnce(&mut tts::Tts) -> Result<R, AppError>) -> Result<R, AppError> {
+    fn with<R>(&self, f: impl FnOnce(&mut TtsState) -> Result<R, AppError>) -> Result<R, AppError> {
         let mut guard = self
             .0
             .lock()
@@ -111,10 +139,13 @@ impl SpikeTts {
             let created = tts::Tts::default().map_err(|err| {
                 AppError::internal(format!("system TTS is unavailable ({}): {err}", tts_hint()))
             })?;
-            *guard = Some(created);
+            *guard = Some(TtsState {
+                tts: created,
+                voices: None,
+            });
         }
         match guard.as_mut() {
-            Some(tts) => f(tts),
+            Some(state) => f(state),
             None => Err(AppError::internal("spike TTS is not initialized")),
         }
     }
@@ -199,7 +230,47 @@ pub async fn spike_prepare_media(app: tauri::AppHandle) -> Result<SpikeMediaDto,
     })
 }
 
-/// Голоса системного TTS (крейт `tts`) и шкала скорости бэкенда.
+/// Сырые байты встроенного тестового файла: в TS — `ArrayBuffer`.
+///
+/// Внутри — [`tauri::ipc::Response`]: Tauri отдаёт тело как `application/octet-stream`, и
+/// `invoke` резолвится `ArrayBuffer` без JSON-массива чисел. Своя обёртка нужна потому, что
+/// `Response` не реализует `specta::Type`; тип в TS задан через `specta_typescript::define`.
+pub struct SpikeMediaBytes(tauri::ipc::Response);
+
+impl specta::Type for SpikeMediaBytes {
+    fn definition(_: &mut specta::Types) -> specta::datatype::DataType {
+        specta::datatype::DataType::Reference(specta_typescript::define("ArrayBuffer"))
+    }
+}
+
+impl tauri::ipc::IpcResponse for SpikeMediaBytes {
+    fn body(self) -> tauri::Result<tauri::ipc::InvokeResponseBody> {
+        self.0.body()
+    }
+}
+
+/// Байты встроенного тестового аудио `name` (`speech.m4a` или `speech.ogg`) — чтобы стенд
+/// строил `Blob` URL без `fetch` к asset-URL (его блокирует CSP `connect-src`). MIME —
+/// `audio/mp4` / `audio/ogg` (см. `spike_prepare_media`). Данные встроены в бинарник, ФС не
+/// читается.
+///
+/// # Errors
+///
+/// `app.invalid_argument`: имя не из фиксированного списка (сравнение точное, без путей).
+#[tauri::command]
+#[specta::specta]
+pub fn spike_media_bytes(name: String) -> Result<SpikeMediaBytes, AppError> {
+    let media = find_media(&SPIKE_MEDIA, &name)
+        .ok_or_else(|| AppError::invalid_argument(format!("unknown spike media file {name:?}")))?;
+    Ok(SpikeMediaBytes(tauri::ipc::Response::new(
+        media.bytes.to_vec(),
+    )))
+}
+
+/// Голоса системного TTS (крейт `tts`) и шкала скорости бэкенда. Всегда заново запрашивает
+/// голоса у бэкенда и обновляет кеш, которым пользуется `spike_tts_speak`.
+///
+/// Не делать `async`: WinRT/AVFoundation требуют главного потока, см. описание модуля.
 ///
 /// # Errors
 ///
@@ -207,8 +278,10 @@ pub async fn spike_prepare_media(app: tauri::AppHandle) -> Result<SpikeMediaDto,
 #[tauri::command]
 #[specta::specta]
 pub fn spike_tts_voices(state: tauri::State<'_, SpikeTts>) -> Result<SpikeTtsVoicesDto, AppError> {
-    state.with(|tts| {
-        let voices = tts.voices().map_err(|err| tts_error("list voices", &err))?;
+    state.with(|st| {
+        let (rate_min, rate_normal, rate_max) =
+            (st.tts.min_rate(), st.tts.normal_rate(), st.tts.max_rate());
+        let voices = st.refresh_voices()?;
         Ok(SpikeTtsVoicesDto {
             backend: backend_name(),
             voices: voices
@@ -218,9 +291,9 @@ pub fn spike_tts_voices(state: tauri::State<'_, SpikeTts>) -> Result<SpikeTtsVoi
                 .map(Into::into)
                 .collect(),
             total_voices: u32::try_from(voices.len()).unwrap_or(u32::MAX),
-            rate_min: tts.min_rate(),
-            rate_normal: tts.normal_rate(),
-            rate_max: tts.max_rate(),
+            rate_min,
+            rate_normal,
+            rate_max,
         })
     })
 }
@@ -243,7 +316,10 @@ fn backend_name() -> String {
 
 /// Произносит `text` голосом для языка `lang` (BCP 47: `en`, `ru-RU`) со скоростью `rate`
 /// (множитель, `1.0` — обычная, ограничивается `0.5…2`; `null` — обычная). Не ждёт
-/// окончания речи; прерывает текущую фразу.
+/// окончания речи; прерывает текущую фразу. Голоса — из кеша `spike_tts_voices` (если его
+/// ещё нет — один запрос к бэкенду).
+///
+/// Не делать `async`: WinRT/AVFoundation требуют главного потока, см. описание модуля.
 ///
 /// # Errors
 ///
@@ -258,22 +334,23 @@ pub fn spike_tts_speak(
     rate: Option<f32>,
 ) -> Result<SpikeTtsSpeakDto, AppError> {
     let text = validate_speak_text(&text)?;
-    state.with(|tts| {
-        let voices = tts.voices().map_err(|err| tts_error("list voices", &err))?;
+    state.with(|st| {
+        let range = RateRange {
+            min: st.tts.min_rate(),
+            normal: st.tts.normal_rate(),
+            max: st.tts.max_rate(),
+        };
+        let backend_rate = backend_rate_or_normal(rate, range)
+            .ok_or_else(|| AppError::invalid_argument("rate must be a finite number"))?;
+        let voices = st.cached_voices()?;
         let infos: Vec<VoiceInfo> = voices.iter().map(voice_info).collect();
         let (voice, info) = select_voice(&infos, &lang)
-            .and_then(|i| Some((voices.get(i)?, infos.get(i)?.clone())))
+            .and_then(|i| Some((voices.get(i)?.clone(), infos.get(i)?.clone())))
             .ok_or_else(|| {
                 AppError::invalid_argument(format!("no system voice for language {lang:?}"))
             })?;
-        let range = RateRange {
-            min: tts.min_rate(),
-            normal: tts.normal_rate(),
-            max: tts.max_rate(),
-        };
-        let backend_rate = backend_rate(rate.unwrap_or(1.0), range)
-            .ok_or_else(|| AppError::invalid_argument("rate must be a finite number"))?;
-        tts.set_voice(voice)
+        let tts = &mut st.tts;
+        tts.set_voice(&voice)
             .map_err(|err| tts_error("set voice", &err))?;
         tts.set_rate(backend_rate)
             .map_err(|err| tts_error("set rate", &err))?;
@@ -306,6 +383,26 @@ mod tests {
         assert!(validate_speak_text(&"я".repeat(MAX_SPEAK_CHARS)).is_ok());
     }
 
+    #[test]
+    fn spike_media_bytes_returns_embedded_file_and_rejects_other_names() {
+        use tauri::ipc::{InvokeResponseBody, IpcResponse};
+        for media in SPIKE_MEDIA {
+            let body = spike_media_bytes(media.name.to_owned())
+                .unwrap()
+                .body()
+                .unwrap();
+            assert!(
+                matches!(&body, InvokeResponseBody::Raw(bytes) if bytes.as_slice() == media.bytes),
+                "{}",
+                media.name
+            );
+        }
+        for bad in ["", "speech.mp3", "../spikes/speech.m4a", "SPEECH.OGG"] {
+            let err = spike_media_bytes(bad.to_owned()).err().unwrap();
+            assert_eq!(err.code, AppErrorCode::InvalidArgument, "{bad:?}");
+        }
+    }
+
     /// Ручная проверка на машине разработчика (молча, без речи): `cargo test -p mpt-app
     /// --features spikes -- --ignored --nocapture system_tts_lists`. В CI синтезатора нет.
     #[test]
@@ -313,7 +410,7 @@ mod tests {
     fn system_tts_lists_voices() {
         let state = SpikeTts::default();
         let voices = state
-            .with(|tts| tts.voices().map_err(|e| tts_error("list voices", &e)))
+            .with(|st| st.refresh_voices().map(<[_]>::to_vec))
             .unwrap();
         let infos: Vec<_> = voices.iter().map(voice_info).collect();
         println!("{} voices; first: {:?}", infos.len(), infos.first());
@@ -330,13 +427,14 @@ mod tests {
     fn system_tts_speaks() {
         let state = SpikeTts::default();
         state
-            .with(|tts| {
-                let voices = tts.voices().map_err(|e| tts_error("list voices", &e))?;
+            .with(|st| {
+                let voices = st.cached_voices()?;
                 let infos: Vec<_> = voices.iter().map(voice_info).collect();
                 let voice = select_voice(&infos, "en")
-                    .and_then(|i| voices.get(i))
+                    .and_then(|i| voices.get(i).cloned())
                     .ok_or_else(|| AppError::internal("no en voice"))?;
-                tts.set_voice(voice)
+                let tts = &mut st.tts;
+                tts.set_voice(&voice)
                     .map_err(|e| tts_error("set voice", &e))?;
                 tts.speak("Hello from the spike test.", true)
                     .map_err(|e| tts_error("speak", &e))?;

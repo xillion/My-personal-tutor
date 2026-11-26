@@ -25,6 +25,7 @@ pub fn collect() -> tauri_specta::Commands<tauri::Wry> {
         app::app_ping,
         app::app_info,
         spike::spike_prepare_media,
+        spike::spike_media_bytes,
         spike::spike_tts_voices,
         spike::spike_tts_speak,
     ]
@@ -35,6 +36,7 @@ pub fn collect() -> tauri_specta::Commands<tauri::Wry> {
 pub fn collect_spikes() -> tauri_specta::Commands<tauri::Wry> {
     tauri_specta::collect_commands![
         spike::spike_prepare_media,
+        spike::spike_media_bytes,
         spike::spike_tts_voices,
         spike::spike_tts_speak,
     ]
