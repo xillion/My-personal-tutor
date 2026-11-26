@@ -96,7 +96,7 @@ cargo test --workspace` зелёные; `cargo tree -p mpt-core -e normal` не 
 ссылок на внешние хосты (`rg -n "https?://" build/ --glob '*.{html,css}'` пуст, проверка
 встроена в `just check`).
 
-#### [ ] T-001.4 `justfile` и CI — `rust-core` · S
+#### [~] T-001.4 `justfile` и CI — `rust-core` · S
 Зависит от: T-001.3
 - Рецепты: `dev`, `build`, `test`, `check`, `gen`, `gen-check`, `fmt`, `lint`, `e2e`,
   `course-sample`. До T-002 `gen` — заглушка, которая печатает «нечего генерировать» и возвращает 0;

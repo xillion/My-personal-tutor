@@ -1,0 +1,41 @@
+# cargo-deny (T-001.4, ADR-24): проверка лицензий Rust-зависимостей.
+# Запуск: `cargo deny --locked check licenses` (входит в `just licenses` и `just check`).
+# Документация: https://embarkstudios.github.io/cargo-deny/checks/licenses/cfg.html
+#
+# Включена только проверка `licenses`: она работает без сети. `advisories` (база RustSec,
+# требует сеть), `bans` и `sources` — возможное расширение отдельной задачей.
+
+[graph]
+# Целевые платформы не ограничиваются: проверяется всё дерево, включая зависимости
+# Windows/macOS/Android/iOS, которые на текущей ОС не собираются.
+all-features = false
+
+[licenses]
+# Всё, что не в списке, запрещено. Каждая лицензия совместима с GPL-3.0-or-later (ADR-24).
+# Выражения `A OR B` проходят, если разрешена хотя бы одна альтернатива, поэтому здесь
+# только то, что реально нужно дереву.
+allow = [
+    # ADR-24: базовый список.
+    "MIT",
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    # Слабый файловый copyleft, совместим с GPLv3 (MPL-2.0 §3.3). cssparser/selectors (wry).
+    "MPL-2.0",
+    "LGPL-2.1-or-later",
+    "LGPL-3.0-or-later",
+    "GPL-3.0-or-later",
+    # Разрешительная лицензия данных ICU/Unicode (icu_*, unicode-ident); FSF: совместима с GPL.
+    "Unicode-3.0",
+    # Apache-2.0 с исключением LLVM — только расширяет права (target-lexicon).
+    "Apache-2.0 WITH LLVM-exception",
+]
+# Список шире фактически используемого (ADR-24) — не предупреждать о неиспользуемых.
+unused-allowed-license = "allow"
+confidence-threshold = 0.9
+
+# Собственные крейты workspace (`publish = false`, GPL-3.0-or-later) не проверяются.
+[licenses.private]
+ignore = true
