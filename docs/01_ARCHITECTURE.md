@@ -128,6 +128,26 @@ cmd quiz_finish(session_id) → QuizSummary
 - Результат команды в TS — `{ status: "ok", data } | { status: "error", error: AppError }`
   (`tauri-specta`); `client.ts` превращает его в `{ ok: true, data } | { ok: false, error }`.
 - Генерация, версии и правило чисел в DTO (≤ 2^53, время — unix ms как `number`) — ADR-23.
+- **`i64` → TS `number` (T-002):** `specta-typescript` 0.0.15 запрещает экспорт `i64`/`u64`/
+  `usize`/`i128` (ошибка `BigIntForbidden`). Каждое такое поле DTO аннотируется явно:
+  `#[specta(type = specta_typescript::Number)] pub built_at_ms: i64` (для `Option<i64>` —
+  `#[specta(type = Option<specta_typescript::Number>)]`). Глобальный
+  `Builder::dangerously_cast_bigints_to_number()` **не используется**: неаннотированное поле
+  должно ронять `just gen`, а аннотация отмечает место, где действует правило «≤ 2^53».
+- **Поля DTO в IPC — `camelCase`** (`#[serde(rename_all = "camelCase")]` на каждом `*Dto`):
+  так же Tauri именует аргументы команд, в TS — `builtAtMs`, `dataDir`. Имена команд в
+  `bindings.ts` — camelCase (`commands.appPing`), IPC-имя — snake_case (`app_ping`).
+- **`AppError.details`** в TS — `unknown` (`#[specta(type = Option<specta_typescript::Unknown>)]`):
+  `serde_json::Value` содержит `i64`/`u64` и не экспортируется; форма деталей зависит от кода,
+  `client.ts` сужает её сам. Поле отсутствует в JSON, если деталей нет (в TS `details?: unknown | null`).
+- **Без serde-фаз:** builder вызывает `disable_serde_phases()`, иначе тип с
+  `skip_serializing_if` раздваивается на `X_Serialize`/`X_Deserialize`, а `X` становится их union.
+  Единый тип описывает обе стороны: поля, которые различаются по фазам, становятся `?:`/`| null`.
+- **Пути в DTO** — строки (`to_string_lossy`), только для отображения и `convertFileSrc`.
+- **`just gen`** = `cargo run --locked -p mpt-app --bin gen_bindings`: бинарь вызывает
+  `mpt_app::export_bindings()` (тот же `specta_builder()`, что в `run()`), окно не создаёт.
+  `just gen-check` = `just gen` + `node scripts/check-generated.mjs`: пустой
+  `git status --porcelain -- src/lib/ipc/bindings.ts schemas/` (видит и неотслеживаемые файлы).
 - Пакет `src-tauri` называется `mpt-app` (lib + bin): `lib.rs` содержит `run()` и
   `specta_builder()`, `src/bin/gen_bindings.rs` экспортирует bindings без запуска окна.
 - `Clock`: трейт `mpt_core::clock::Clock { fn now_ms(&self) -> i64 }` и фиктивные часы для тестов —

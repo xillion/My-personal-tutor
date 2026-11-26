@@ -55,13 +55,14 @@ test-rust:
 test-js:
     pnpm test
 
-# Сгенерировать bindings.ts и JSON-схемы (заглушка до T-002)
+# Сгенерировать src/lib/ipc/bindings.ts (tauri-specta); JSON-схемы — с T-101 (`mptc schema`)
 gen:
-    @echo 'gen: нечего генерировать (до T-002)'
+    cargo run --locked -p mpt-app --bin gen_bindings
 
-# Проверить, что сгенерированные файлы актуальны (`just gen` не меняет дерево)
+# Проверить, что сгенерированные файлы актуальны: после `just gen` в bindings.ts и schemas/
+# нет изменений и новых неотслеживаемых файлов (`git status --porcelain`)
 gen-check: gen
-    git diff --exit-code '--' src/lib/ipc/bindings.ts schemas/
+    node scripts/check-generated.mjs
 
 # Собрать фронтенд и проверить, что в build/ нет внешних URL (ADR-21)
 offline:

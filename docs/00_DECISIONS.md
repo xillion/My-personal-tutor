@@ -378,7 +378,7 @@ TypeScript 6, Paraglide 3, Vitest 5). Node 20 из README снят с подде
      экспортирует в `src/lib/ipc/bindings.ts`.
   2. `schemas/*.json`: подкоманда `mptc schema --out schemas/` (появится в T-101).
   `bindings.ts` и `schemas/` исключены из Prettier/ESLint, чтобы форматтер не создавал дифф.
-  `just gen-check` = `just gen` + `git diff --exit-code -- src/lib/ipc/bindings.ts schemas/`;
+  `just gen-check` = `just gen` + пустой `git status --porcelain -- src/lib/ipc/bindings.ts schemas/` (`scripts/check-generated.mjs`; ловит и неотслеживаемые файлы, T-002);
   входит в `just check`.
 - **Числа в IPC:** целые в DTO не превышают 2^53. Время в DTO — unix ms как TS `number`
   (`i64` экспортируется через явную аннотацию `specta`, способ фиксирует T-002). Идентификаторы

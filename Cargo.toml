@@ -20,6 +20,13 @@ mpt-services = { path = "crates/mpt-services" }
 # Внешние. Tauri — только 2.x (ADR-23); точные версии — в Cargo.lock.
 tauri = "2.12"
 tauri-build = "2.7"
+# IPC-контракт Rust ↔ TS (ADR-10, ADR-23): RC-версии фиксируются точно.
+tauri-specta = { version = "=2.0.0-rc.29", features = ["derive", "typescript"] }
+specta = { version = "=2.0.0-rc.28", features = ["derive"] }
+specta-typescript = "=0.0.15"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"

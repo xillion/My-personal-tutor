@@ -32,6 +32,12 @@ mpt-storage.workspace = true
 # `protocol-asset`: asset protocol для медиа курсов (`app.security.assetProtocol`, ADR-11).
 # Tauri CLI сверяет этот список фич с tauri.conf.json.
 tauri = { workspace = true, features = ["protocol-asset"] }
+tauri-specta.workspace = true
+specta.workspace = true
+specta-typescript.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
 
 [lints]
 workspace = true

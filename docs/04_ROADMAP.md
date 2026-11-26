@@ -35,7 +35,7 @@ T-001, T-004, T-005 разбиты на подзадачи; команды из 
 Приёмка: `git log --oneline main` — ровно 1 коммит; `git status --porcelain` пуст;
 `git check-ignore .claude/settings.local.json` печатает путь; `LICENSE` — GPL-3.0.
 
-### [ ] T-001 Каркас монорепозитория — `architect` → `rust-core`, `svelte-ui` · L (разбита на T-001.1–T-001.4)
+### [x] T-001 Каркас монорепозитория — `architect` → `rust-core`, `svelte-ui` · L (разбита на T-001.1–T-001.4)
 Зависит от: T-000
 
 Общая приёмка: `just dev` открывает окно; `just check` зелёный локально (Linux) и в CI на
@@ -120,7 +120,7 @@ cargo test --workspace` зелёные; `cargo tree -p mpt-core -e normal` не 
 нет, задача закрывается с пометкой «CI не прогонялся» в CHANGELOG, а прогон CI становится первым
 пунктом следующей задачи.
 
-### [ ] T-002 Типизированный IPC и ошибки — `rust-core` (+ `svelte-ui` для `client.ts`) · M
+### [~] T-002 Типизированный IPC и ошибки — `rust-core` (+ `svelte-ui` для `client.ts`) · M
 Зависит от: T-001
 - `tauri-specta`, `specta`, `specta-typescript` — точные версии из ADR-23; `specta_builder()`
   в `mpt-app`, бинарь `gen_bindings`; `just gen` пишет `src/lib/ipc/bindings.ts`.
