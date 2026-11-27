@@ -2,6 +2,7 @@
 import type { AppError } from '#lib/ipc/client.js';
 import { spikePrepareMedia, type SpikeMediaDto } from '#lib/ipc/spikes.js';
 import { AudioProbe, type AudioProbeResult } from './audio-probe.svelte.js';
+import { redactReport } from './redact.js';
 
 export interface AudioReport {
   dir: string | null;
@@ -44,8 +45,9 @@ export class AudioSpike {
     this.probes = [];
   }
 
+  /** Пути и URL обезличены (`redact.ts`): в отчёт не попадает имя пользователя ОС. */
   report(): AudioReport {
-    return {
+    return redactReport({
       dir: this.media?.dir ?? null,
       files: (this.media?.files ?? []).map(({ name, mime, sizeBytes }) => ({
         name,
@@ -54,6 +56,6 @@ export class AudioSpike {
       })),
       prepareError: this.error,
       probes: this.probes.map((probe) => $state.snapshot(probe.result)),
-    };
+    } satisfies AudioReport) as AudioReport;
   }
 }

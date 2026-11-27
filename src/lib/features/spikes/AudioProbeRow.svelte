@@ -18,8 +18,8 @@
 >
   <p class="font-bold">{label}</p>
   <p class="text-base" aria-live="polite">
-    {#if r.fetchError !== null}
-      {m.spike_audio_fetch_failed({ error: r.fetchError })}
+    {#if r.bytesError !== null}
+      {m.spike_audio_fetch_failed({ error: r.bytesError })}
     {:else if r.mediaError !== null}
       {m.spike_audio_media_error({ code: r.mediaError.code })}
     {:else if r.canplayMs === null}
@@ -28,6 +28,13 @@
       {m.spike_audio_ready({ duration: r.duration ?? '?', ms: r.canplayMs })}
     {/if}
   </p>
+  {#if r.assetFetch !== null}
+    <p class="text-base opacity-70">
+      {r.assetFetch === 'ok'
+        ? m.spike_audio_asset_fetch_ok()
+        : m.spike_audio_asset_fetch_failed({ error: r.assetFetchError ?? '' })}
+    </p>
+  {/if}
   <div class="flex flex-wrap gap-2">
     <button
       type="button"

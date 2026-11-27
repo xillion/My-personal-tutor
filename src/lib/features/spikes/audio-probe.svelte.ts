@@ -1,6 +1,6 @@
 // Раздел (1): воспроизведение одного файла одним способом — `convertFileSrc` или Blob URL.
 import { mediaSrc } from '#lib/ipc/client.js';
-import type { SpikeMediaFileDto } from '#lib/ipc/spikes.js';
+import { spikeMediaBytes, type SpikeMediaFileDto } from '#lib/ipc/spikes.js';
 import {
   describeError,
   mediaErrorInfo,
@@ -19,9 +19,19 @@ export interface AudioProbeResult {
   url: string | null;
   /** `canPlayType(mime)`: `''`, `'maybe'` или `'probably'`. */
   canPlayType: string;
-  /** Blob URL: размер полученного blob, байт; ошибка `fetch`. */
+  /**
+   * Blob URL: байты из `spike_media_bytes` (IPC, без `fetch`). `bytesIsArrayBuffer` — пришёл ли
+   * именно `ArrayBuffer`; `blobBytes` — его `byteLength`; `bytesError` — ошибка команды.
+   */
+  bytesIsArrayBuffer: boolean | null;
   blobBytes: number | null;
-  fetchError: string | null;
+  bytesError: string | null;
+  /**
+   * Blob URL: отдельная справочная проба `fetch(convertFileSrc(path))` — блокирует ли CSP
+   * (`connect-src`) fetch к asset-URL (для T-004.4). На воспроизведение не влияет.
+   */
+  assetFetch: 'ok' | 'failed' | null;
+  assetFetchError: string | null;
   /** Время от назначения `src` до `canplay`, мс. */
   canplayMs: number | null;
   duration: number | null;
@@ -59,8 +69,11 @@ export class AudioProbe {
       source,
       url: null,
       canPlayType: document.createElement('audio').canPlayType(file.mime),
+      bytesIsArrayBuffer: null,
       blobBytes: null,
-      fetchError: null,
+      bytesError: null,
+      assetFetch: null,
+      assetFetchError: null,
       canplayMs: null,
       duration: null,
       playOk: null,
@@ -76,23 +89,16 @@ export class AudioProbe {
     });
   }
 
-  /** Создаёт `<audio>` и назначает `src`; Blob URL — через `fetch` asset-URL. */
+  /** Создаёт `<audio>` и назначает `src`; Blob URL — из байтов `spike_media_bytes`. */
   async load(): Promise<void> {
     if (this.#audio !== null) return;
     const assetUrl = mediaSrc(this.file.path);
     let url = assetUrl;
     if (this.source === 'blob') {
-      try {
-        const response = await fetch(assetUrl);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const blob = await response.blob();
-        this.result.blobBytes = blob.size;
-        this.#blobUrl = URL.createObjectURL(blob);
-        url = this.#blobUrl;
-      } catch (error: unknown) {
-        this.result.fetchError = describeError(error);
-        return;
-      }
+      void this.#probeAssetFetch(assetUrl);
+      const blobUrl = await this.#blobUrlFromBytes();
+      if (blobUrl === null) return;
+      url = blobUrl;
     }
     const audio = new Audio();
     audio.preload = 'auto';
@@ -189,6 +195,36 @@ export class AudioProbe {
     this.#audio = null;
     if (this.#blobUrl !== null) URL.revokeObjectURL(this.#blobUrl);
     this.#blobUrl = null;
+  }
+
+  async #blobUrlFromBytes(): Promise<string | null> {
+    const result = await spikeMediaBytes(this.file.name);
+    if (!result.ok) {
+      this.result.bytesError = `${result.error.code}: ${result.error.message}`;
+      return null;
+    }
+    const data = result.data;
+    this.result.bytesIsArrayBuffer = data instanceof ArrayBuffer;
+    this.result.blobBytes = data.byteLength;
+    // Повторный вызов `load()` до завершения первого не должен создать второй Blob URL.
+    if (this.#blobUrl === null) {
+      this.#blobUrl = URL.createObjectURL(new Blob([data], { type: this.file.mime }));
+    }
+    return this.#blobUrl;
+  }
+
+  /** Только для отчёта: проходит ли `fetch` к asset-URL под текущей CSP. */
+  async #probeAssetFetch(assetUrl: string): Promise<void> {
+    try {
+      const response = await fetch(assetUrl);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      await response.arrayBuffer();
+      this.result.assetFetch = 'ok';
+      this.result.assetFetchError = null;
+    } catch (error: unknown) {
+      this.result.assetFetch = 'failed';
+      this.result.assetFetchError = describeError(error);
+    }
   }
 
   async #run(action: (audio: HTMLAudioElement) => Promise<void>): Promise<void> {

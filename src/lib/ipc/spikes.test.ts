@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { rejectWith } from '../../test/ipc.js';
 import { mediaSrc } from './client.js';
 import {
+  spikeMediaBytes,
   spikePrepareMedia,
   spikeTtsSpeak,
   spikeTtsVoices,
@@ -99,5 +100,30 @@ describe('mediaSrc', () => {
     expect(mediaSrc('/data/courses/_spike/speech.m4a')).toBe(
       'asset://localhost/%2Fdata%2Fcourses%2F_spike%2Fspeech.m4a',
     );
+  });
+});
+
+describe('spikeMediaBytes', () => {
+  it('returns raw bytes as an ArrayBuffer', async () => {
+    let payload: unknown;
+    mockIPC((cmd, args) => {
+      payload = { cmd, args };
+      return new Uint8Array([7, 8, 9]).buffer;
+    });
+    const result = await spikeMediaBytes('speech.ogg');
+    expect(payload).toEqual({ cmd: 'spike_media_bytes', args: { name: 'speech.ogg' } });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.data).toBeInstanceOf(ArrayBuffer);
+      expect(result.data.byteLength).toBe(3);
+    }
+  });
+
+  it('returns invalid_argument for an unknown name', async () => {
+    mockIPC(() => rejectWith({ code: 'app.invalid_argument', message: 'unknown spike media' }));
+    await expect(spikeMediaBytes('../etc/passwd')).resolves.toEqual({
+      ok: false,
+      error: { code: 'app.invalid_argument', message: 'unknown spike media' },
+    });
   });
 });

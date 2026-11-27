@@ -33,6 +33,8 @@
   "spike_audio_source_blob": "Blob URL",
   "spike_audio_ready": "Готово: {duration} с, canplay через {ms} мс",
   "spike_audio_fetch_failed": "Не удалось получить файл: {error}",
+  "spike_audio_asset_fetch_ok": "fetch к asset-URL: работает (только для отчёта)",
+  "spike_audio_asset_fetch_failed": "fetch к asset-URL: заблокирован ({error}) — Blob URL от него не зависит",
   "spike_audio_media_error": "Ошибка медиа, код {code}",
   "spike_audio_play": "Играть",
   "spike_audio_pause": "Пауза",

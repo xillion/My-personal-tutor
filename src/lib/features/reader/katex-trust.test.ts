@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { katexTrust, renderMathToString } from './katex-trust.js';
+import { katexTrust, MAX_TEX_LENGTH, renderMath, renderMathToString } from './katex-trust.js';
 
 function renderToDom(tex: string): HTMLElement {
   const host = document.createElement('div');
@@ -68,5 +68,39 @@ describe('renderMath with katexTrust', () => {
   it('marks rejected commands as unsupported instead of throwing', () => {
     const host = renderToDom('\\htmlClass{evil}{x}');
     expect(host.textContent).toContain('\\htmlClass');
+  });
+});
+
+describe('renderMath fallback for hostile TeX', () => {
+  it('caps \\rule sizes with maxSize', () => {
+    const host = renderToDom('\\rule{9999em}{9999em}');
+    const styles = [...host.querySelectorAll('[style]')].map((el) => el.getAttribute('style'));
+    expect(styles.join(';')).not.toContain('9999');
+    expect(styles.join(';')).toMatch(/\b20em\b/);
+  });
+
+  it('renders a ParseError from toMarkup as escaped .katex-error with a title', () => {
+    const host = renderToDom('\\htmlData{a onclick=1}{<b>y</b>}');
+    const error = host.querySelector('.katex-error');
+    expect(error).not.toBeNull();
+    expect(error?.textContent).toBe('\\htmlData{a onclick=1}{<b>y</b>}');
+    expect(error?.getAttribute('title')).toMatch(/ParseError/);
+    expect(host.querySelector('b, [onclick]')).toBeNull();
+  });
+
+  it('renders the same fallback into an element and replaces old content', () => {
+    const host = document.createElement('div');
+    host.innerHTML = '<i>old</i>';
+    renderMath(host, '\\htmlData{t>=1}{y}');
+    expect(host.children).toHaveLength(1);
+    expect(host.firstElementChild).toHaveClass('katex-error');
+    expect(host.textContent).toBe('\\htmlData{t>=1}{y}');
+  });
+
+  it('does not call KaTeX for TeX longer than MAX_TEX_LENGTH', () => {
+    const tex = 'x'.repeat(MAX_TEX_LENGTH + 1);
+    const host = renderToDom(tex);
+    expect(host.querySelector('.katex')).toBeNull();
+    expect(host.querySelector('.katex-error')?.getAttribute('title')).toContain('too long');
   });
 });

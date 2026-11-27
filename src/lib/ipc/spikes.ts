@@ -26,6 +26,14 @@ export function spikePrepareMedia(): Promise<Result<SpikeMediaDto>> {
   return call(() => commands.spikePrepareMedia());
 }
 
+/**
+ * Сырые байты встроенного тестового аудио (`speech.m4a` / `speech.ogg`) — для Blob URL без
+ * `fetch` к asset-URL. Приходят как `ArrayBuffer` (raw-ответ IPC).
+ */
+export function spikeMediaBytes(name: string): Promise<Result<ArrayBuffer>> {
+  return call(() => commands.spikeMediaBytes(name));
+}
+
 /** Голоса системного TTS и шкала скорости бэкенда. */
 export function spikeTtsVoices(): Promise<Result<SpikeTtsVoicesDto>> {
   return call(() => commands.spikeTtsVoices());

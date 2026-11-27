@@ -33,6 +33,8 @@
   "spike_audio_source_blob": "Blob URL",
   "spike_audio_ready": "Ready: {duration} s, canplay after {ms} ms",
   "spike_audio_fetch_failed": "Could not get the file: {error}",
+  "spike_audio_asset_fetch_ok": "fetch to the asset URL: works (only for the report)",
+  "spike_audio_asset_fetch_failed": "fetch to the asset URL: blocked ({error}) — Blob URL does not depend on it",
   "spike_audio_media_error": "Media error, code {code}",
   "spike_audio_play": "Play",
   "spike_audio_pause": "Pause",

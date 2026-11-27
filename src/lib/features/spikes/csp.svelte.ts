@@ -1,5 +1,6 @@
 // Раздел (6): нарушения CSP (`securitypolicyviolation`). В `tauri dev` CSP не применяется
 // (§4a) — счётчик осмыслен в сборке `just build-spikes`. Нарушения до открытия страницы не видны.
+import { redactReport } from './redact.js';
 
 export interface CspViolation {
   directive: string;
@@ -70,11 +71,12 @@ export class CspSpike {
     this.last = [];
   }
 
+  /** `blockedURI`/`sourceFile` обезличены (`redact.ts`). */
   report(): object {
-    return {
+    return redactReport({
       count: this.count,
       last: $state.snapshot(this.last),
       probe: $state.snapshot(this.probe),
-    };
+    }) as object;
   }
 }

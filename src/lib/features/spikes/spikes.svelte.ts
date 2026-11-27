@@ -5,6 +5,7 @@ import { CspSpike } from './csp.svelte.js';
 import { JitterSpike } from './jitter.svelte.js';
 import { KatexSpike } from './katex.svelte.js';
 import { PointerSpike } from './pointer.svelte.js';
+import { redactReport } from './redact.js';
 import { TtsSpike } from './tts.svelte.js';
 
 export type CopyStatus = 'idle' | 'copied' | 'manual';
@@ -20,8 +21,9 @@ export class SpikesState {
   /** JSON для ручного копирования, если буфер обмена недоступен. */
   manualJson = $state<string | null>(null);
 
+  /** Все строки обезличены (`redact.ts`): разделы делают это сами, здесь — страховка. */
   report(): object {
-    return {
+    return redactReport({
       task: 'T-004.1',
       // eslint-disable-next-line svelte/prefer-svelte-reactivity -- момент снимка, не реактивное значение
       generatedAt: new Date().toISOString(),
@@ -45,7 +47,7 @@ export class SpikesState {
       pointer: this.pointer.report(),
       katex: this.katex.report(),
       csp: this.csp.report(),
-    };
+    }) as object;
   }
 
   json(): string {
