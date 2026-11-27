@@ -13,3 +13,11 @@ export function devPageEnabled(): boolean {
 export function spikesPageEnabled(): boolean {
   return import.meta.env.DEV || import.meta.env.VITE_MPT_SPIKES === '1';
 }
+
+/**
+ * То же, что `spikesPageEnabled()`, но константа модуля: сборщик подставляет её значение и
+ * выбрасывает мёртвую ветку `import()` стенда (вызов функции из общего чанка он не сворачивает).
+ * Для тестов, подменяющих env во время выполнения, — `spikesPageEnabled()`.
+ */
+export const SPIKES_STAND_BUILD: boolean =
+  import.meta.env.DEV || import.meta.env.VITE_MPT_SPIKES === '1';

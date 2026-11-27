@@ -71,6 +71,31 @@ function stripTailwindBannerUrl(): Plugin {
   };
 }
 
+const SPIKES_STAND = '/src/lib/features/spikes/SpikesStand.svelte';
+
+/**
+ * Стенд спайков (T-004.1, §4a) не попадает в обычный `vite build`. Страница `/dev/spikes`
+ * импортирует его через `import()` в ветке, мёртвой без `VITE_MPT_SPIKES=1`; Rolldown удаляет
+ * вызов, но чанк динамического импорта всё равно выпускает. Поэтому в такой сборке модуль
+ * стенда подменяется пустым компонентом — UI стенда и `spike_*` в build/ не попадают.
+ * `just build-spikes` (`VITE_MPT_SPIKES=1`), `vite dev` и Vitest получают настоящий стенд.
+ */
+function stubSpikesStandInRelease(): Plugin {
+  let stub = false;
+  return {
+    name: 'mpt:stub-spikes-stand-in-release',
+    apply: 'build',
+    enforce: 'pre',
+    configResolved(config) {
+      stub = config.env['VITE_MPT_SPIKES'] !== '1';
+    },
+    load(id) {
+      if (stub && id.endsWith(SPIKES_STAND)) return '<!-- stand is excluded from this build -->\n';
+      return null;
+    },
+  };
+}
+
 // https://vite.dev/config/ и https://v2.tauri.app/start/frontend/sveltekit/
 export default defineConfig({
   plugins: [
@@ -80,6 +105,7 @@ export default defineConfig({
     paraglideVitePlugin({ project: './project.inlang' }),
     svelteVirtualCssWarmup(),
     stripTailwindBannerUrl(),
+    stubSpikesStandInRelease(),
     // SvelteKit 3: конфигурация Kit передаётся плагину, `svelte.config.js` не поддерживается.
     // Tauri не имеет Node.js-сервера для SSR, поэтому приложение — SPA: adapter-static
     // с fallback на index.html (ADR-01, https://svelte.dev/docs/kit/single-page-apps).

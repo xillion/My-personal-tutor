@@ -176,7 +176,9 @@ cmd quiz_finish(session_id) → QuizSummary
   (спайки T-004, E2E T-007) выполняются на сборке `tauri build --debug`, а не только в dev.
 - Dev-маршруты (`/dev`, `/dev/spikes`, `/dev/ui`) доступны только при `import.meta.env.DEV`;
   исключение — `/dev/spikes` открывается и в сборке `just build-spikes` (`VITE_MPT_SPIKES=1`,
-  `src/lib/features/dev/gate.ts`), чтобы проверять спайки под настоящей CSP; в `pnpm build` — 404.
+  `src/lib/features/dev/gate.ts`), чтобы проверять спайки под настоящей CSP; в `pnpm build` — 404,
+  а код стенда (`SpikesStand.svelte`, `spike_*`) в `build/` не попадает (`import()` за константой
+  сборки + плагин `stubSpikesStandInRelease` в `vite.config.ts`).
   Спайк-команды Rust — за cargo-feature `spikes`, выключенной по умолчанию и в релизе.
 
 ## 5. Состояние фронтенда

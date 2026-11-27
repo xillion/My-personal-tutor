@@ -64,9 +64,15 @@ describe('/dev/spikes page', () => {
     });
   }
 
+  /** Стенд загружается через `import()`: ждём первый раздел. */
+  async function renderPage(): Promise<void> {
+    render(Page);
+    await screen.findByTestId('spike-audio-result');
+  }
+
   it('renders all six sections with results', async () => {
     mockBackend();
-    render(Page);
+    await renderPage();
     for (const id of ['audio', 'jitter', 'tts', 'pointer', 'katex', 'csp']) {
       expect(screen.getByTestId(`spike-${id}-result`)).toBeInTheDocument();
     }
@@ -78,7 +84,7 @@ describe('/dev/spikes page', () => {
 
   it('shows data-t of a clicked formula part', async () => {
     mockBackend();
-    render(Page);
+    await renderPage();
     const part = document.querySelector('[data-t="t2"]');
     expect(part).not.toBeNull();
     if (part !== null) await fireEvent.click(part);
@@ -87,7 +93,7 @@ describe('/dev/spikes page', () => {
 
   it('speaks Russian and shows the chosen voice', async () => {
     mockBackend();
-    render(Page);
+    await renderPage();
     await fireEvent.click(screen.getByRole('button', { name: 'Сказать по-русски' }));
     expect(await screen.findByText('Голос: Russian (ru), скорость бэкенда 0')).toBeInTheDocument();
   });
@@ -97,7 +103,7 @@ describe('/dev/spikes page', () => {
     vi.stubGlobal('matchMedia', () => ({ matches: false }));
     // В jsdom нет navigator.clipboard — как в WebView без разрешения на буфер обмена.
     expect('clipboard' in navigator).toBe(false);
-    render(Page);
+    await renderPage();
     await fireEvent.click(screen.getByRole('button', { name: 'Скопировать результат в JSON' }));
     const textarea = await screen.findByRole('textbox', { name: 'Результат в JSON' });
     const report = JSON.parse((textarea as HTMLTextAreaElement).value) as Record<string, unknown>;
