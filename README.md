@@ -21,13 +21,15 @@ docs/05_TESTING.md            # тест-стратегия, E2E-сценари�
 ## Как начать
 
 1. Скопируйте содержимое в корень нового репозитория, `git init`, первый коммит.
+Подробная инструкция по сборке и запуску на Windows, Linux и macOS — `docs/BUILDING.md`.
+
 2. Установите Rust (stable), Node 24 LTS (см. ADR-23), pnpm, `just`, `cargo-deny`, системные зависимости Tauri 2 для вашей ОС
    (на Windows — ещё PowerShell 7+, `pwsh`: его использует `justfile`). `just` — версии 1.59 и
    новее (рецепты используют атрибут `[env]`). На Linux, кроме зависимостей Tauri, нужны
    заголовки speech-dispatcher и libclang — их требует системный TTS спайков (cargo-feature
    `spikes`), с которой работают `just dev`, `just check` и `just gen`:
    Debian/Ubuntu — `sudo apt install libspeechd-dev libclang-dev`,
-   Fedora — `sudo dnf install speech-dispatcher-devel clang-devel`;
+   Fedora — `sudo dnf install speech-dispatcher-devel clang`;
    для сборки курсов — `ffmpeg`.
 3. Запустите `claude` в корне репозитория.
 4. Первый шаг: `/phase-plan Фаза 0` — архитектор сверит план с актуальными версиями библиотек.

@@ -144,6 +144,7 @@ Cargo workspace (`Cargo.toml`, edition 2024, Rust 1.100 — ADR-23). Завис�
 | `04_ROADMAP.md` | Задачи, зависимости, приёмка |
 | `05_TESTING.md` | Стратегия тестов, Definition of Done |
 | `06_PROJECT_STRUCTURE.md` | Этот документ |
+| `BUILDING.md` | Сборка и запуск на Windows, Linux, macOS; артефакты CI |
 | `KNOWN_ISSUES.md` | Журнал известных проблем (S1–S4) |
 | `spikes/` | Отчёты платформенных спайков (план T-004.2) |
 
