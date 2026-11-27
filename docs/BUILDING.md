@@ -65,6 +65,7 @@ sudo dnf group install c-development
 - Плагины GStreamer нужны WebKitGTK для воспроизведения аудио, в том числе AAC (`.m4a`).
   Состав для поставки приложения решается в T-004 (ADR-24: GStreamer в AppImage).
 - Для голоса TTS должен работать speech-dispatcher с модулем синтеза (по умолчанию espeak-ng).
+- Системные голоса — временные (KI-021): целевой TTS — Piper, установка и сборка — `docs/PIPER.md`.
 
 ### macOS 13+
 

@@ -1,0 +1,430 @@
+{
+  "task": "T-004.1",
+  "generatedAt": "2026-11-27T07:07:08.989Z",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36 Edg/152.0.0.0",
+  "platform": "Win32",
+  "language": "ru",
+  "build": {
+    "dev": false,
+    "mode": "production",
+    "spikesFlag": "1"
+  },
+  "screen": {
+    "devicePixelRatio": 1.25,
+    "width": 1536,
+    "height": 864
+  },
+  "reducedMotion": false,
+  "audio": {
+    "dir": "$APPDATA/courses/_spike",
+    "files": [
+      {
+        "name": "speech.m4a",
+        "mime": "audio/mp4",
+        "sizeBytes": 334215
+      },
+      {
+        "name": "speech.ogg",
+        "mime": "audio/ogg",
+        "sizeBytes": 205434
+      }
+    ],
+    "prepareError": null,
+    "probes": [
+      {
+        "file": "speech.m4a",
+        "mime": "audio/mp4",
+        "source": "asset",
+        "url": "http://asset.localhost/…/speech.m4a",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": null,
+        "blobBytes": null,
+        "bytesError": null,
+        "assetFetch": null,
+        "assetFetchError": null,
+        "canplayMs": 29.1,
+        "duration": 36.1,
+        "playOk": true,
+        "playError": null,
+        "seekTarget": 18.05,
+        "seekActual": 18.05,
+        "seekedMs": 12,
+        "ended": true,
+        "playbackRate": 0.75,
+        "preservesPitch": true,
+        "measuredRate": 0.74,
+        "mediaError": null
+      },
+      {
+        "file": "speech.m4a",
+        "mime": "audio/mp4",
+        "source": "blob",
+        "url": "blob:http://tauri.localhost/cc0e0867-65ec-41b6-a870-816b6a0cb026",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": true,
+        "blobBytes": 334215,
+        "bytesError": null,
+        "assetFetch": "failed",
+        "assetFetchError": "TypeError: Failed to fetch",
+        "canplayMs": 27.6,
+        "duration": 36.1,
+        "playOk": true,
+        "playError": null,
+        "seekTarget": 18.05,
+        "seekActual": 18.052,
+        "seekedMs": 12.4,
+        "ended": true,
+        "playbackRate": null,
+        "preservesPitch": null,
+        "measuredRate": null,
+        "mediaError": null
+      },
+      {
+        "file": "speech.ogg",
+        "mime": "audio/ogg",
+        "source": "asset",
+        "url": "http://asset.localhost/…/speech.ogg",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": null,
+        "blobBytes": null,
+        "bytesError": null,
+        "assetFetch": null,
+        "assetFetchError": null,
+        "canplayMs": 21.2,
+        "duration": 36.107,
+        "playOk": null,
+        "playError": null,
+        "seekTarget": null,
+        "seekActual": null,
+        "seekedMs": null,
+        "ended": null,
+        "playbackRate": null,
+        "preservesPitch": null,
+        "measuredRate": null,
+        "mediaError": null
+      },
+      {
+        "file": "speech.ogg",
+        "mime": "audio/ogg",
+        "source": "blob",
+        "url": "blob:http://tauri.localhost/55e7841d-7106-48b5-bc74-6e29f3530a15",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": true,
+        "blobBytes": 205434,
+        "bytesError": null,
+        "assetFetch": "failed",
+        "assetFetchError": "TypeError: Failed to fetch",
+        "canplayMs": 22.5,
+        "duration": 36.107,
+        "playOk": null,
+        "playError": null,
+        "seekTarget": null,
+        "seekActual": null,
+        "seekedMs": null,
+        "ended": null,
+        "playbackRate": null,
+        "preservesPitch": null,
+        "measuredRate": null,
+        "mediaError": null
+      }
+    ]
+  },
+  "jitter": [
+    {
+      "file": "speech.m4a",
+      "source": "asset",
+      "stats": {
+        "frames": 637,
+        "frameError": {
+          "count": 636,
+          "p50": 0.59,
+          "p95": 2.05,
+          "max": 15.7
+        },
+        "updateInterval": {
+          "count": 634,
+          "p50": 15.6,
+          "p95": 15.7,
+          "max": 31.3
+        },
+        "staleRatio": 0.003,
+        "drift": -34.8
+      },
+      "error": null
+    },
+    {
+      "file": "speech.m4a",
+      "source": "blob",
+      "stats": {
+        "frames": 640,
+        "frameError": {
+          "count": 639,
+          "p50": 0.61,
+          "p95": 2.9,
+          "max": 21.97
+        },
+        "updateInterval": {
+          "count": 637,
+          "p50": 15.6,
+          "p95": 15.7,
+          "max": 46.9
+        },
+        "staleRatio": 0.003,
+        "drift": -50.79
+      },
+      "error": null
+    },
+    {
+      "file": "speech.ogg",
+      "source": "asset",
+      "stats": {
+        "frames": 640,
+        "frameError": {
+          "count": 639,
+          "p50": 0.58,
+          "p95": 2.54,
+          "max": 15.6
+        },
+        "updateInterval": {
+          "count": 637,
+          "p50": 15.6,
+          "p95": 15.7,
+          "max": 31.3
+        },
+        "staleRatio": 0.003,
+        "drift": -30.77
+      },
+      "error": null
+    },
+    {
+      "file": "speech.ogg",
+      "source": "blob",
+      "stats": {
+        "frames": 639,
+        "frameError": {
+          "count": 638,
+          "p50": 0.56,
+          "p95": 4.79,
+          "max": 16.41
+        },
+        "updateInterval": {
+          "count": 636,
+          "p50": 15.6,
+          "p95": 15.7,
+          "max": 31.3
+        },
+        "staleRatio": 0.003,
+        "drift": -65.16
+      },
+      "error": null
+    }
+  ],
+  "tts": {
+    "error": null,
+    "backend": "WinRT",
+    "totalVoices": 2,
+    "shownVoices": 2,
+    "rateScale": {
+      "min": 0.5,
+      "normal": 1,
+      "max": 6
+    },
+    "en": {
+      "count": 0,
+      "first": []
+    },
+    "ru": {
+      "count": 2,
+      "first": [
+        {
+          "id": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech_OneCore\\Voices\\Tokens\\MSTTS_V110_ruRU_IrinaM",
+          "name": "Microsoft Irina",
+          "language": "ru-RU"
+        },
+        {
+          "id": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech_OneCore\\Voices\\Tokens\\MSTTS_V110_ruRU_PavelM",
+          "name": "Microsoft Pavel",
+          "language": "ru-RU"
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "lang": "ru-RU",
+        "rate": 1,
+        "result": {
+          "voice": {
+            "id": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech_OneCore\\Voices\\Tokens\\MSTTS_V110_ruRU_IrinaM",
+            "name": "Microsoft Irina",
+            "language": "ru-RU"
+          },
+          "backendRate": 1
+        },
+        "error": null,
+        "latencyMs": 289
+      },
+      {
+        "lang": "en-US",
+        "rate": 1,
+        "result": null,
+        "error": {
+          "code": "app.invalid_argument",
+          "message": "no system voice for language \"en-US\""
+        },
+        "latencyMs": 10
+      },
+      {
+        "lang": "en-US",
+        "rate": 1,
+        "result": null,
+        "error": {
+          "code": "app.invalid_argument",
+          "message": "no system voice for language \"en-US\""
+        },
+        "latencyMs": 16
+      },
+      {
+        "lang": "en-US",
+        "rate": 1,
+        "result": null,
+        "error": {
+          "code": "app.invalid_argument",
+          "message": "no system voice for language \"en-US\""
+        },
+        "latencyMs": 16
+      },
+      {
+        "lang": "en-US",
+        "rate": 1,
+        "result": null,
+        "error": {
+          "code": "app.invalid_argument",
+          "message": "no system voice for language \"en-US\""
+        },
+        "latencyMs": 11
+      },
+      {
+        "lang": "en-US",
+        "rate": 1,
+        "result": null,
+        "error": {
+          "code": "app.invalid_argument",
+          "message": "no system voice for language \"en-US\""
+        },
+        "latencyMs": 12
+      },
+      {
+        "lang": "en-US",
+        "rate": 1,
+        "result": null,
+        "error": {
+          "code": "app.invalid_argument",
+          "message": "no system voice for language \"en-US\""
+        },
+        "latencyMs": 17
+      },
+      {
+        "lang": "en-US",
+        "rate": 1,
+        "result": null,
+        "error": {
+          "code": "app.invalid_argument",
+          "message": "no system voice for language \"en-US\""
+        },
+        "latencyMs": 5
+      },
+      {
+        "lang": "ru-RU",
+        "rate": 1,
+        "result": {
+          "voice": {
+            "id": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech_OneCore\\Voices\\Tokens\\MSTTS_V110_ruRU_IrinaM",
+            "name": "Microsoft Irina",
+            "language": "ru-RU"
+          },
+          "backendRate": 1
+        },
+        "error": null,
+        "latencyMs": 85
+      }
+    ]
+  },
+  "pointer": {
+    "coalescedApi": true,
+    "predictedApi": true,
+    "maxTouchPoints": 0,
+    "types": [
+      {
+        "pointerType": "mouse",
+        "downs": 3,
+        "moves": 324,
+        "coalescedTotal": 325,
+        "coalescedMax": 2,
+        "pressure": {
+          "min": 0,
+          "max": 0.5
+        },
+        "tiltX": {
+          "min": 0,
+          "max": 0
+        },
+        "tiltY": {
+          "min": 0,
+          "max": 0
+        },
+        "twist": {
+          "min": 0,
+          "max": 0
+        },
+        "eraser": false
+      }
+    ]
+  },
+  "katex": {
+    "dataParts": 3,
+    "clicks": 1,
+    "lastDataT": "t1",
+    "forbiddenChecked": 6,
+    "leaked": [],
+    "fontsLoaded": true
+  },
+  "csp": {
+    "count": 18,
+    "last": [
+      {
+        "directive": "script-src",
+        "blockedURI": "eval",
+        "sourceFile": "http://tauri.localhost/_app/immutable/chunks/BCHlVHr2.js",
+        "disposition": "enforce"
+      },
+      {
+        "directive": "script-src-elem",
+        "blockedURI": "inline",
+        "sourceFile": "http://tauri.localhost/_app/immutable/chunks/BCHlVHr2.js",
+        "disposition": "enforce"
+      },
+      {
+        "directive": "script-src",
+        "blockedURI": "eval",
+        "sourceFile": "http://tauri.localhost/_app/immutable/chunks/BCHlVHr2.js",
+        "disposition": "enforce"
+      },
+      {
+        "directive": "script-src-elem",
+        "blockedURI": "inline",
+        "sourceFile": "http://tauri.localhost/_app/immutable/chunks/BCHlVHr2.js",
+        "disposition": "enforce"
+      },
+      {
+        "directive": "script-src",
+        "blockedURI": "eval",
+        "sourceFile": "http://tauri.localhost/_app/immutable/chunks/BCHlVHr2.js",
+        "disposition": "enforce"
+      }
+    ],
+    "probe": {
+      "inlineScriptBlocked": true,
+      "evalBlocked": true
+    }
+  }
+}
