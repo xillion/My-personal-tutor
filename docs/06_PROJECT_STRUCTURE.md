@@ -124,6 +124,7 @@ Cargo workspace (`Cargo.toml`, edition 2024, Rust 1.100 — ADR-23). Завис�
 | `scripts/check-generated.mjs` | `gen-check`: сгенерированные файлы не изменены и не появились новые |
 | `scripts/check-messages.mjs` | Полнота переводов во всех локалях |
 | `scripts/check-no-external-urls.mjs` | Офлайн-сборка: в `build/` нет внешних URL (ADR-21) |
+| `scripts/check-release-bundle.mjs` | Релизная сборка: в `build/` нет стенда спайков (страховка Vite-плагина `stubSpikesStandInRelease`) |
 | `scripts/check-npm-licenses.mjs` | Лицензии prod-зависимостей npm по allowlist ADR-24 |
 | `scripts/prepare.mjs` | `pnpm install`: `svelte-kit sync` и компиляция Paraglide |
 | `scripts/make-spike-audio.sh` | Генерация тестового аудио спайков (espeak-ng + ffmpeg) |
