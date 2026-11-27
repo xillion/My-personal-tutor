@@ -3,6 +3,7 @@ import { mediaSrc } from '#lib/ipc/client.js';
 import { spikeMediaBytes, type SpikeMediaFileDto } from '#lib/ipc/spikes.js';
 import {
   describeError,
+  measurePlaybackRate,
   mediaErrorInfo,
   round,
   waitForEvent,
@@ -43,7 +44,10 @@ export interface AudioProbeResult {
   ended: boolean | null;
   playbackRate: number | null;
   preservesPitch: boolean | null;
-  /** Фактическая скорость по `currentTime` за ~2 с после `playbackRate = 0.75`. */
+  /**
+   * Фактическая скорость по `currentTime` за ~2 с после `playbackRate = 0.75`; окно начинается,
+   * когда `currentTime` реально пошёл (см. `measurePlaybackRate`).
+   */
   measuredRate: number | null;
   mediaError: MediaErrorInfo | null;
 }
@@ -181,11 +185,7 @@ export class AudioProbe {
       await audio.play().catch((error: unknown) => {
         this.result.playError = describeError(error);
       });
-      const ct0 = audio.currentTime;
-      const t0 = performance.now();
-      await new Promise((resolve) => setTimeout(resolve, RATE_SAMPLE_MS));
-      const wall = (performance.now() - t0) / 1000;
-      this.result.measuredRate = wall > 0 ? round((audio.currentTime - ct0) / wall, 2) : null;
+      this.result.measuredRate = await measurePlaybackRate(audio, RATE_SAMPLE_MS);
     });
   }
 

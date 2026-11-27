@@ -45,17 +45,29 @@
       {/each}
     </div>
   {/if}
-  <label class="flex flex-wrap items-center gap-3">
-    {m.spike_tts_rate({ rate: tts.rate })}
-    <input
-      type="range"
-      class="min-h-touch w-64 accent-accent"
-      min="0.5"
-      max="2"
-      step="0.25"
-      bind:value={tts.rate}
-    />
-  </label>
+  <!--
+    Подпись и значение не стоят перед ползунком в одной строке: ширина «×1» / «×1.25» менялась
+    при каждом шаге и сдвигала ползунок под пальцем — он «дёргался». Значение — справа, в поле
+    фиксированной ширины с моноширинными цифрами.
+  -->
+  <div class="flex flex-col gap-1">
+    <label for="spike-tts-rate" class="font-bold">{m.spike_tts_rate()}</label>
+    <div class="flex items-center gap-3">
+      <input
+        id="spike-tts-rate"
+        type="range"
+        class="min-h-touch w-64 shrink-0 accent-accent"
+        min="0.5"
+        max="2"
+        step="0.25"
+        aria-valuetext={m.spike_tts_rate_value({ rate: tts.rate.toFixed(2) })}
+        bind:value={tts.rate}
+      />
+      <output for="spike-tts-rate" class="inline-block w-[4.5ch] shrink-0 text-right tabular-nums">
+        {m.spike_tts_rate_value({ rate: tts.rate.toFixed(2) })}
+      </output>
+    </div>
+  </div>
   <div class="flex flex-wrap gap-2">
     <button type="button" class={BUTTON} disabled={tts.speaking} onclick={() => tts.speak('en')}>
       {m.spike_tts_say_en()}

@@ -98,6 +98,23 @@ describe('/dev/spikes page', () => {
     expect(await screen.findByText('Голос: Russian (ru), скорость бэкенда 0')).toBeInTheDocument();
   });
 
+  it('keeps the TTS rate slider stable across consecutive input events', async () => {
+    mockBackend();
+    await renderPage();
+    const slider = screen.getByRole<HTMLInputElement>('slider', { name: 'Скорость' });
+    const output = slider.parentElement?.querySelector('output');
+    for (const value of ['1.25', '1.5', '1.75', '2', '0.75', '0.5']) {
+      await fireEvent.input(slider, { target: { value } });
+      // Тот же элемент (не пересоздан), значение не перезаписано округлением/форматированием.
+      expect(screen.getByRole('slider', { name: 'Скорость' })).toBe(slider);
+      expect(slider.value).toBe(value);
+      expect(output?.textContent.trim()).toBe(`×${Number(value).toFixed(2)}`);
+    }
+    await fireEvent.click(screen.getByRole('button', { name: 'Сказать по-русски' }));
+    expect(await screen.findByText('Голос: Russian (ru), скорость бэкенда 0')).toBeInTheDocument();
+    expect(slider.value).toBe('0.5');
+  });
+
   it('falls back to a textarea when the clipboard is unavailable', async () => {
     mockBackend();
     vi.stubGlobal('matchMedia', () => ({ matches: false }));
