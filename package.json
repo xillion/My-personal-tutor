@@ -22,6 +22,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "check:messages": "node scripts/check-messages.mjs",
     "check:offline": "node scripts/check-no-external-urls.mjs build",
+    "check:release-bundle": "node scripts/check-release-bundle.mjs build",
     "check:licenses": "node scripts/check-npm-licenses.mjs",
     "lint": "pnpm i18n && prettier --check . && eslint .",
     "format": "prettier --write .",

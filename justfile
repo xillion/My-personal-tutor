@@ -79,10 +79,11 @@ gen:
 gen-check: gen
     node scripts/check-generated.mjs
 
-# Собрать фронтенд и проверить, что в build/ нет внешних URL (ADR-21)
+# Собрать фронтенд и проверить, что в build/ нет внешних URL (ADR-21) и стенда спайков
 offline:
     pnpm build
     pnpm check:offline
+    pnpm check:release-bundle
 
 # Проверить лицензии зависимостей Rust и npm (ADR-24)
 licenses:
