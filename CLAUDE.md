@@ -17,6 +17,7 @@ Tailwind v4 · Bits UI · SQLite (`rusqlite`) · `fsrs` · KaTeX · Paraglide.
 | `docs/03_DATA_MODEL.md` | БД, миграции, прогресс |
 | `docs/04_ROADMAP.md` | список задач, зависимости, критерии приёмки |
 | `docs/05_TESTING.md` | стратегия тестов и Definition of Done |
+| `docs/06_PROJECT_STRUCTURE.md` | где какой модуль лежит, что уже есть и что появится в какой задаче |
 
 ## Золотые правила
 
