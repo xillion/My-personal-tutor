@@ -32,6 +32,13 @@
   (`call()`, `errorMessage()` с исчерпывающим switch); страница `/dev` (только DEV); проверка
   полноты переводов в `pnpm check` (KI-005); ESLint запрещает импорт `bindings` вне `src/lib/ipc`.
 
+- Стенд платформенных спайков `/dev/spikes` (T-004.1): тестовое аудио AAC/Opus, spike-команды за
+  feature `spikes` (медиа, байты медиа по IPC, TTS через крейт `tts`) в отдельном
+  `bindings.spikes.ts`; разделы аудио, джиттер, TTS, перо, KaTeX, CSP; отчёт JSON с обезличенными
+  путями; `katex-trust.ts` (только `\htmlData`, fallback без исключений); Windows-артефакт CI со
+  спайками; `docs/BUILDING.md` (сборка на Windows/Linux/macOS); `docs/06_PROJECT_STRUCTURE.md`.
+  Первые результаты на Fedora 44 — `docs/spikes/raw/`.
+
 ### Fixed
 - Windows: тестовые бинари `mpt-app` падали с STATUS_ENTRYPOINT_NOT_FOUND — манифест приложения
   (Common-Controls v6) теперь встраивается во все цели, а не только в bin. (T-002)

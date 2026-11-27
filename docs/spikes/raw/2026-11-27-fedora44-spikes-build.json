@@ -1,0 +1,334 @@
+{
+  "task": "T-004.1",
+  "generatedAt": "2026-11-27T06:38:31.004Z",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/60.5 Safari/605.1.15",
+  "platform": "Linux x86_64",
+  "language": "en-US",
+  "build": {
+    "dev": false,
+    "mode": "production",
+    "spikesFlag": "1"
+  },
+  "screen": {
+    "devicePixelRatio": 2,
+    "width": 1536,
+    "height": 864
+  },
+  "reducedMotion": false,
+  "audio": {
+    "dir": "$APPDATA/courses/_spike",
+    "files": [
+      {
+        "name": "speech.m4a",
+        "mime": "audio/mp4",
+        "sizeBytes": 334215
+      },
+      {
+        "name": "speech.ogg",
+        "mime": "audio/ogg",
+        "sizeBytes": 205434
+      }
+    ],
+    "prepareError": null,
+    "probes": [
+      {
+        "file": "speech.m4a",
+        "mime": "audio/mp4",
+        "source": "asset",
+        "url": "asset://localhost/…/speech.m4a",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": null,
+        "blobBytes": null,
+        "bytesError": null,
+        "assetFetch": null,
+        "assetFetchError": null,
+        "canplayMs": null,
+        "duration": null,
+        "playOk": null,
+        "playError": null,
+        "seekTarget": null,
+        "seekActual": null,
+        "seekedMs": null,
+        "ended": null,
+        "playbackRate": null,
+        "preservesPitch": null,
+        "measuredRate": null,
+        "mediaError": {
+          "code": 4,
+          "message": ""
+        }
+      },
+      {
+        "file": "speech.m4a",
+        "mime": "audio/mp4",
+        "source": "blob",
+        "url": "blob:tauri://localhost/fff34971-fbc8-4aba-9550-51ce591d43c0",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": true,
+        "blobBytes": 334215,
+        "bytesError": null,
+        "assetFetch": "failed",
+        "assetFetchError": "TypeError: Load failed",
+        "canplayMs": 112,
+        "duration": 36.1,
+        "playOk": true,
+        "playError": null,
+        "seekTarget": 18.05,
+        "seekActual": 18.05,
+        "seekedMs": 4,
+        "ended": true,
+        "playbackRate": 0.75,
+        "preservesPitch": true,
+        "measuredRate": 0.44,
+        "mediaError": null
+      },
+      {
+        "file": "speech.ogg",
+        "mime": "audio/ogg",
+        "source": "asset",
+        "url": "asset://localhost/…/speech.ogg",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": null,
+        "blobBytes": null,
+        "bytesError": null,
+        "assetFetch": null,
+        "assetFetchError": null,
+        "canplayMs": null,
+        "duration": null,
+        "playOk": false,
+        "playError": "NotSupportedError: The operation is not supported.",
+        "seekTarget": null,
+        "seekActual": null,
+        "seekedMs": null,
+        "ended": null,
+        "playbackRate": null,
+        "preservesPitch": null,
+        "measuredRate": null,
+        "mediaError": {
+          "code": 4,
+          "message": ""
+        }
+      },
+      {
+        "file": "speech.ogg",
+        "mime": "audio/ogg",
+        "source": "blob",
+        "url": "blob:tauri://localhost/7b7940dc-59cd-4f95-a6d2-9454c3d9a50e",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": true,
+        "blobBytes": 205434,
+        "bytesError": null,
+        "assetFetch": "failed",
+        "assetFetchError": "TypeError: Load failed",
+        "canplayMs": 102,
+        "duration": 36.1,
+        "playOk": true,
+        "playError": null,
+        "seekTarget": 18.05,
+        "seekActual": 18.05,
+        "seekedMs": 9,
+        "ended": true,
+        "playbackRate": 0.75,
+        "preservesPitch": true,
+        "measuredRate": 0.41,
+        "mediaError": null
+      }
+    ]
+  },
+  "jitter": [
+    {
+      "file": "speech.m4a",
+      "stats": null,
+      "error": "Error: canplay timeout, error code 4"
+    },
+    {
+      "file": "speech.ogg",
+      "stats": null,
+      "error": "Error: canplay timeout, error code 4"
+    }
+  ],
+  "tts": {
+    "error": null,
+    "backend": "SpeechDispatcher",
+    "totalVoices": 14595,
+    "shownVoices": 139,
+    "rateScale": {
+      "min": -100,
+      "normal": 0,
+      "max": 100
+    },
+    "en": {
+      "count": 8,
+      "first": [
+        {
+          "id": "English (Caribbean)",
+          "name": "English (Caribbean)",
+          "language": "en-029"
+        },
+        {
+          "id": "English (Great Britain)",
+          "name": "English (Great Britain)",
+          "language": "en-GB"
+        },
+        {
+          "id": "English (Scotland)",
+          "name": "English (Scotland)",
+          "language": "en-GB-SCOTLAND"
+        },
+        {
+          "id": "English (Lancaster)",
+          "name": "English (Lancaster)",
+          "language": "en-GB-X-GBCLAN"
+        },
+        {
+          "id": "English (West Midlands)",
+          "name": "English (West Midlands)",
+          "language": "en-GB-X-GBCWMD"
+        },
+        {
+          "id": "English (Received Pronunciation)",
+          "name": "English (Received Pronunciation)",
+          "language": "en-GB-X-RP"
+        },
+        {
+          "id": "English (Shavian alphabet)",
+          "name": "English (Shavian alphabet)",
+          "language": "en-SHAW"
+        },
+        {
+          "id": "English (America)",
+          "name": "English (America)",
+          "language": "en-US"
+        }
+      ]
+    },
+    "ru": {
+      "count": 3,
+      "first": [
+        {
+          "id": "Russian",
+          "name": "Russian",
+          "language": "ru"
+        },
+        {
+          "id": "Russian (Classic)",
+          "name": "Russian (Classic)",
+          "language": "ru-CL"
+        },
+        {
+          "id": "Russian (Latvia)",
+          "name": "Russian (Latvia)",
+          "language": "ru-LV"
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "lang": "en-US",
+        "rate": 1,
+        "result": {
+          "voice": {
+            "id": "English (America)",
+            "name": "English (America)",
+            "language": "en-US"
+          },
+          "backendRate": 0
+        },
+        "error": null,
+        "latencyMs": 438
+      },
+      {
+        "lang": "ru-RU",
+        "rate": 1,
+        "result": {
+          "voice": {
+            "id": "Russian",
+            "name": "Russian",
+            "language": "ru"
+          },
+          "backendRate": 0
+        },
+        "error": null,
+        "latencyMs": 486
+      }
+    ]
+  },
+  "pointer": {
+    "coalescedApi": true,
+    "predictedApi": true,
+    "maxTouchPoints": 0,
+    "types": [
+      {
+        "pointerType": "mouse",
+        "downs": 2,
+        "moves": 194,
+        "coalescedTotal": 197,
+        "coalescedMax": 3,
+        "pressure": {
+          "min": 0,
+          "max": 0.5
+        },
+        "tiltX": {
+          "min": 0,
+          "max": 0
+        },
+        "tiltY": {
+          "min": 0,
+          "max": 0
+        },
+        "twist": {
+          "min": 0,
+          "max": 0
+        },
+        "eraser": false
+      }
+    ]
+  },
+  "katex": {
+    "dataParts": 3,
+    "clicks": 3,
+    "lastDataT": "t1",
+    "forbiddenChecked": 6,
+    "leaked": [],
+    "fontsLoaded": true
+  },
+  "csp": {
+    "count": 6,
+    "last": [
+      {
+        "directive": "connect-src",
+        "blockedURI": "asset://localhost/…/speech.ogg",
+        "sourceFile": "tauri://localhost/_app/immutable/chunks/B4pyB-Sm.js",
+        "disposition": "enforce"
+      },
+      {
+        "directive": "connect-src",
+        "blockedURI": "asset://localhost/…/speech.m4a",
+        "sourceFile": "tauri://localhost/_app/immutable/chunks/B4pyB-Sm.js",
+        "disposition": "enforce"
+      },
+      {
+        "directive": "connect-src",
+        "blockedURI": "asset://localhost/…/speech.ogg",
+        "sourceFile": "tauri://localhost/_app/immutable/chunks/B4pyB-Sm.js",
+        "disposition": "enforce"
+      },
+      {
+        "directive": "script-src-elem",
+        "blockedURI": "inline",
+        "sourceFile": "tauri://localhost/_app/immutable/chunks/B4pyB-Sm.js",
+        "disposition": "enforce"
+      },
+      {
+        "directive": "script-src",
+        "blockedURI": "eval",
+        "sourceFile": "tauri://localhost/_app/immutable/chunks/B4pyB-Sm.js",
+        "disposition": "enforce"
+      }
+    ],
+    "probe": {
+      "inlineScriptBlocked": true,
+      "evalBlocked": true
+    }
+  }
+}

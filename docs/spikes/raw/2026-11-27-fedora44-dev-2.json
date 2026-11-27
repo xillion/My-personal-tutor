@@ -1,0 +1,307 @@
+{
+  "task": "T-004.1",
+  "generatedAt": "2026-11-27T07:53:51.094Z",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/60.5 Safari/605.1.15",
+  "platform": "Linux x86_64",
+  "language": "en-US",
+  "build": {
+    "dev": true,
+    "mode": "development",
+    "spikesFlag": null
+  },
+  "screen": {
+    "devicePixelRatio": 2,
+    "width": 1536,
+    "height": 864
+  },
+  "reducedMotion": false,
+  "audio": {
+    "dir": "$APPDATA/courses/_spike",
+    "files": [
+      {
+        "name": "speech.m4a",
+        "mime": "audio/mp4",
+        "sizeBytes": 334215
+      },
+      {
+        "name": "speech.ogg",
+        "mime": "audio/ogg",
+        "sizeBytes": 205434
+      }
+    ],
+    "prepareError": null,
+    "probes": [
+      {
+        "file": "speech.m4a",
+        "mime": "audio/mp4",
+        "source": "asset",
+        "url": "asset://localhost/…/speech.m4a",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": null,
+        "blobBytes": null,
+        "bytesError": null,
+        "assetFetch": null,
+        "assetFetchError": null,
+        "canplayMs": null,
+        "duration": null,
+        "playOk": false,
+        "playError": "NotSupportedError: The operation is not supported.",
+        "seekTarget": null,
+        "seekActual": null,
+        "seekedMs": null,
+        "ended": null,
+        "playbackRate": null,
+        "preservesPitch": null,
+        "measuredRate": null,
+        "mediaError": {
+          "code": 4,
+          "message": ""
+        }
+      },
+      {
+        "file": "speech.m4a",
+        "mime": "audio/mp4",
+        "source": "blob",
+        "url": "blob:http://127.0.0.1:1420/65c3d0f6-8b87-4b73-ab39-f6c3eef14de1",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": true,
+        "blobBytes": 334215,
+        "bytesError": null,
+        "assetFetch": "ok",
+        "assetFetchError": null,
+        "canplayMs": 99,
+        "duration": 36.1,
+        "playOk": true,
+        "playError": null,
+        "seekTarget": null,
+        "seekActual": null,
+        "seekedMs": null,
+        "ended": null,
+        "playbackRate": null,
+        "preservesPitch": null,
+        "measuredRate": null,
+        "mediaError": null
+      },
+      {
+        "file": "speech.ogg",
+        "mime": "audio/ogg",
+        "source": "asset",
+        "url": "asset://localhost/…/speech.ogg",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": null,
+        "blobBytes": null,
+        "bytesError": null,
+        "assetFetch": null,
+        "assetFetchError": null,
+        "canplayMs": null,
+        "duration": null,
+        "playOk": false,
+        "playError": "NotSupportedError: The operation is not supported.",
+        "seekTarget": null,
+        "seekActual": null,
+        "seekedMs": null,
+        "ended": null,
+        "playbackRate": null,
+        "preservesPitch": null,
+        "measuredRate": null,
+        "mediaError": {
+          "code": 4,
+          "message": ""
+        }
+      },
+      {
+        "file": "speech.ogg",
+        "mime": "audio/ogg",
+        "source": "blob",
+        "url": "blob:http://127.0.0.1:1420/a979478c-7e9a-472d-a8cc-aa86bc167147",
+        "canPlayType": "maybe",
+        "bytesIsArrayBuffer": true,
+        "blobBytes": 205434,
+        "bytesError": null,
+        "assetFetch": "ok",
+        "assetFetchError": null,
+        "canplayMs": 105,
+        "duration": 36.1,
+        "playOk": true,
+        "playError": null,
+        "seekTarget": null,
+        "seekActual": null,
+        "seekedMs": null,
+        "ended": null,
+        "playbackRate": null,
+        "preservesPitch": null,
+        "measuredRate": null,
+        "mediaError": null
+      }
+    ]
+  },
+  "jitter": [
+    {
+      "file": "speech.m4a",
+      "source": "asset",
+      "stats": null,
+      "error": "Error: canplay timeout, error code 4"
+    },
+    {
+      "file": "speech.m4a",
+      "source": "blob",
+      "stats": {
+        "frames": 619,
+        "frameError": {
+          "count": 618,
+          "p50": 0.25,
+          "p95": 0.84,
+          "max": 17
+        },
+        "updateInterval": {
+          "count": 614,
+          "p50": 16,
+          "p95": 17,
+          "max": 65
+        },
+        "staleRatio": 0.006,
+        "drift": -70.79
+      },
+      "error": null
+    }
+  ],
+  "tts": {
+    "error": null,
+    "backend": "SpeechDispatcher",
+    "totalVoices": 14595,
+    "shownVoices": 139,
+    "rateScale": {
+      "min": -100,
+      "normal": 0,
+      "max": 100
+    },
+    "en": {
+      "count": 8,
+      "first": [
+        {
+          "id": "English (Caribbean)",
+          "name": "English (Caribbean)",
+          "language": "en-029"
+        },
+        {
+          "id": "English (Great Britain)",
+          "name": "English (Great Britain)",
+          "language": "en-GB"
+        },
+        {
+          "id": "English (Scotland)",
+          "name": "English (Scotland)",
+          "language": "en-GB-SCOTLAND"
+        },
+        {
+          "id": "English (Lancaster)",
+          "name": "English (Lancaster)",
+          "language": "en-GB-X-GBCLAN"
+        },
+        {
+          "id": "English (West Midlands)",
+          "name": "English (West Midlands)",
+          "language": "en-GB-X-GBCWMD"
+        },
+        {
+          "id": "English (Received Pronunciation)",
+          "name": "English (Received Pronunciation)",
+          "language": "en-GB-X-RP"
+        },
+        {
+          "id": "English (Shavian alphabet)",
+          "name": "English (Shavian alphabet)",
+          "language": "en-SHAW"
+        },
+        {
+          "id": "English (America)",
+          "name": "English (America)",
+          "language": "en-US"
+        }
+      ]
+    },
+    "ru": {
+      "count": 3,
+      "first": [
+        {
+          "id": "Russian",
+          "name": "Russian",
+          "language": "ru"
+        },
+        {
+          "id": "Russian (Classic)",
+          "name": "Russian (Classic)",
+          "language": "ru-CL"
+        },
+        {
+          "id": "Russian (Latvia)",
+          "name": "Russian (Latvia)",
+          "language": "ru-LV"
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "lang": "ru-RU",
+        "rate": 0.75,
+        "result": {
+          "voice": {
+            "id": "Russian",
+            "name": "Russian",
+            "language": "ru"
+          },
+          "backendRate": -50
+        },
+        "error": null,
+        "latencyMs": 488
+      }
+    ]
+  },
+  "pointer": {
+    "coalescedApi": true,
+    "predictedApi": true,
+    "maxTouchPoints": 0,
+    "types": [
+      {
+        "pointerType": "mouse",
+        "downs": 2,
+        "moves": 232,
+        "coalescedTotal": 237,
+        "coalescedMax": 2,
+        "pressure": {
+          "min": 0,
+          "max": 0.5
+        },
+        "tiltX": {
+          "min": 0,
+          "max": 0
+        },
+        "tiltY": {
+          "min": 0,
+          "max": 0
+        },
+        "twist": {
+          "min": 0,
+          "max": 0
+        },
+        "eraser": false
+      }
+    ]
+  },
+  "katex": {
+    "dataParts": 3,
+    "clicks": 0,
+    "lastDataT": null,
+    "forbiddenChecked": 6,
+    "leaked": [],
+    "fontsLoaded": true
+  },
+  "csp": {
+    "count": 0,
+    "last": [],
+    "probe": {
+      "inlineScriptBlocked": false,
+      "evalBlocked": false
+    }
+  }
+}
