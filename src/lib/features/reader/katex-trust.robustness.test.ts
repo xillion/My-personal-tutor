@@ -8,10 +8,13 @@ const HOSTILE = [
   // KaTeX бросает ParseError из toMarkup, а не из парсера — throwOnError его не ловит.
   '\\htmlData{a onclick=1}{y}',
   '\\htmlData{t>=1}{y}',
-  // Глубокая вложенность — RangeError: Maximum call stack size exceeded.
+  // Длиннее MAX_TEX_LENGTH — fallback по длине, KaTeX не вызывается.
   `${'\\frac{1}{'.repeat(1000)}x${'}'.repeat(1000)}`,
   `${'{'.repeat(5000)}x${'}'.repeat(5000)}`,
 ];
+
+// Короче MAX_TEX_LENGTH, но KaTeX падает с RangeError (переполнение стека) — ловит try/catch.
+const DEEP_WITHIN_LIMIT = `${'{'.repeat(3000)}x${'}'.repeat(3000)}`;
 
 describe('katex-trust robustness (D1)', () => {
   it.each(HOSTILE.map((tex) => [tex.slice(0, 40), tex]))(
@@ -29,4 +32,11 @@ describe('katex-trust robustness (D1)', () => {
       }).not.toThrow();
     },
   );
+
+  it('falls back to .katex-error on stack overflow within the length limit', () => {
+    expect(DEEP_WITHIN_LIMIT.length).toBeLessThan(10_000);
+    const html = renderMathToString(DEEP_WITHIN_LIMIT);
+    expect(html).toContain('katex-error');
+    expect(html).toContain('title="RangeError');
+  });
 });
